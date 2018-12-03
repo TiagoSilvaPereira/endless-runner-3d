@@ -25,6 +25,7 @@ class Level {
 
         // Create the scene space
         this.scene = new BABYLON.Scene(this.game.engine);
+        this.scene.enablePhysics();
 
         var camera = this.createArcCamera();
 
@@ -142,6 +143,8 @@ class Level {
 
         tileMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
         tile.material = tileMaterial.clone();
+
+        tile.physicsImpostor = new BABYLON.PhysicsImpostor(tile, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, this.scene);
         
         // Intercaling the ground color
         if((currentTileNumber % 2) == 0) {
@@ -166,6 +169,8 @@ class Level {
 
         tileMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
         tile.material = tileMaterial.clone();
+
+        tile.physicsImpostor = new BABYLON.PhysicsImpostor(tile, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, this.scene);
         
         // Intercaling the ground color
         if((currentTileNumber % 2) == 0) {
@@ -195,6 +200,10 @@ class Level {
 
         tileMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
         tile.material = tileMaterial.clone();
+
+        tile.physicsImpostor = new BABYLON.PhysicsImpostor(tile, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, this.scene);
+
+        obstacle.physicsImpostor = new BABYLON.PhysicsImpostor(obstacle, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, this.scene);
         
         // Intercaling the ground color
         if((currentTileNumber % 2) == 0) {
@@ -220,6 +229,8 @@ class Level {
 
         tileMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
         tile.material = tileMaterial.clone();
+
+        obstacle.physicsImpostor = new BABYLON.PhysicsImpostor(obstacle, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, this.scene);
         
         // Intercaling the ground color
         if((currentTileNumber % 2) == 0) {
@@ -238,6 +249,8 @@ class Level {
         let playerMaterial = new BABYLON.StandardMaterial("playerMaterial", this.scene);
         playerMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1);
         player.material = playerMaterial;
+
+        player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.9 }, this.scene);
 
         return player;
 
@@ -276,7 +289,6 @@ class Level {
             //this.player.position.y = 0.25;
         }
 
-        console.log(this.player.position.z)
     }
     
 }
