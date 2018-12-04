@@ -8,13 +8,9 @@ class Game {
         this.keys = {};
 
         /**
-         * Game states
+         * Is game paused?
          */
-        this.states = [
-            'LOADING',
-            'PLAYING',
-            'PAUSED'
-        ];
+        this.paused = false;
 
         /**
          * Starts the BABYLON engine on the Canvas element
@@ -26,7 +22,7 @@ class Game {
         this.currentLevelNumber = 1;
         
         this.levels = [
-            new Level(this)
+            new Level()
         ];
 
     }
@@ -35,6 +31,18 @@ class Game {
         this.listenKeys();
         this.startLevel();
         this.render();
+    }
+
+    pause() {
+        this.paused = true;
+    }
+
+    isPaused() {
+        return this.paused;
+    }
+
+    continue() {
+        this.paused = false;
     }
 
     listenKeys() {
@@ -94,6 +102,25 @@ class Game {
             this.engine.resize();
         });
 
+    }
+
+    drawEllipsoid(mesh) {
+        mesh.computeWorldMatrix(true);
+        var ellipsoidMat = mesh.getScene().getMaterialByName("__ellipsoidMat__");
+        if (! ellipsoidMat) { 
+            ellipsoidMat = new BABYLON.StandardMaterial("__ellipsoidMat__", mesh.getScene());
+            ellipsoidMat.wireframe = true;
+            ellipsoidMat.emissiveColor = BABYLON.Color3.Green();
+            ellipsoidMat.specularColor = BABYLON.Color3.Black();
+        }
+        var ellipsoid = BABYLON.Mesh.CreateSphere("__ellipsoid__", 9, 1, mesh.getScene());
+        ellipsoid.scaling = mesh.ellipsoid.clone();
+        ellipsoid.scaling.y *= 2;
+        ellipsoid.scaling.x *= 2;
+        ellipsoid.scaling.z *= 2;
+        ellipsoid.material = ellipsoidMat;
+        ellipsoid.parent = mesh;
+        ellipsoid.computeWorldMatrix(true);
     }
 
 }

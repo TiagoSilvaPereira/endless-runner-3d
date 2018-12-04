@@ -1,12 +1,14 @@
+window.GAME = null;
+
 var app = {
 
     init() {
-        this.game = new Game();
-        this.game.start();
+        GAME = new Game();
+        GAME.start();
     }
 
 }
 
 window.addEventListener('load', () => {
     app.init();
-})
+});

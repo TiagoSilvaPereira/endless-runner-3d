@@ -1,8 +1,6 @@
 class Level {
 
-    constructor(game) {
-
-        this.game = game;
+    constructor() {
 
         this.scene = null;
         this.player = null;
@@ -24,14 +22,14 @@ class Level {
     createScene() {
 
         // Create the scene space
-        this.scene = new BABYLON.Scene(this.game.engine);
-        this.scene.enablePhysics();
+        this.scene = new BABYLON.Scene(GAME.engine);
+        this.scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
 
         var camera = this.createArcCamera();
 
         // This attaches the camera to the canvas
         this.scene.activeCamera = camera;
-        camera.attachControl(this.game.canvas, true);
+        camera.attachControl(GAME.canvas, true);
 
         // Add lights to the scene
         var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), this.scene);
@@ -39,9 +37,10 @@ class Level {
 
         this.createGround();
 
-        this.player = this.createPlayer();
-        camera.target = this.player;
-        camera.lockedTarget = this.player;
+        // Creates the player and set it as camera target
+        this.player = new Player();
+        camera.target = this.player.getMesh();
+        camera.lockedTarget = this.player.getMesh();
 
         this.scene.registerBeforeRender(
             this.beforeRender.bind(this)
@@ -59,29 +58,6 @@ class Level {
         camera.radius = 2;
 
         return camera;
-    }
-
-    createFollowCamera() {
-        let camera = new BABYLON.FollowCamera("followCamera", new BABYLON.Vector3(0, 10, -10), this.scene);
-
-        // The goal distance of camera from target
-        camera.radius = 2;
-        // The goal height of camera above local origin (centre) of target
-        camera.heightOffset = 1;
-        // The goal rotation of camera around local origin (centre) of target in x y plane
-        // camera.rotationOffset = 180;
-        camera.rotationOffset = 180;
-        // Acceleration of camera in moving from current to goal position
-        camera.cameraAcceleration = 0.05;
-        // The speed at which acceleration is halted
-        camera.maxCameraSpeed = 10;
-
-        return camera;
-    }
-
-    createFreeCamera() {
-        return new BABYLON.FreeCamera("freeCamera", new BABYLON.Vector3(0,
-            0,-10), this.scene);
     }
 
     createGround() {
@@ -144,8 +120,8 @@ class Level {
         tileMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
         tile.material = tileMaterial.clone();
 
-        tile.physicsImpostor = new BABYLON.PhysicsImpostor(tile, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, this.scene);
-        
+        tile.checkCollisions = true;
+
         // Intercaling the ground color
         if((currentTileNumber % 2) == 0) {
             tile.material.diffuseColor = new BABYLON.Color3(0.8, 0.3, 0.3);
@@ -169,8 +145,8 @@ class Level {
 
         tileMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
         tile.material = tileMaterial.clone();
-
-        tile.physicsImpostor = new BABYLON.PhysicsImpostor(tile, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, this.scene);
+        
+        tile.checkCollisions = true;
         
         // Intercaling the ground color
         if((currentTileNumber % 2) == 0) {
@@ -198,12 +174,10 @@ class Level {
         obstacle.position.z = tile.position.z;
         obstacle.position.y = 0.125;
 
+        tile.checkCollisions = true;
+
         tileMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
         tile.material = tileMaterial.clone();
-
-        tile.physicsImpostor = new BABYLON.PhysicsImpostor(tile, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, this.scene);
-
-        obstacle.physicsImpostor = new BABYLON.PhysicsImpostor(obstacle, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, this.scene);
         
         // Intercaling the ground color
         if((currentTileNumber % 2) == 0) {
@@ -230,7 +204,7 @@ class Level {
         tileMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
         tile.material = tileMaterial.clone();
 
-        obstacle.physicsImpostor = new BABYLON.PhysicsImpostor(obstacle, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, this.scene);
+        tile.checkCollisions = true;
         
         // Intercaling the ground color
         if((currentTileNumber % 2) == 0) {
@@ -241,53 +215,9 @@ class Level {
 
     }
 
-    createPlayer() {
-
-        let player = BABYLON.MeshBuilder.CreateBox("player", {width: 0.3333333, height: 0.5, depth: 0.3333333}, this.scene);
-        player.position.y = 0.25;
-
-        let playerMaterial = new BABYLON.StandardMaterial("playerMaterial", this.scene);
-        playerMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1);
-        player.material = playerMaterial;
-
-        player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.9 }, this.scene);
-
-        return player;
-
-    }
-
     beforeRender() {
         
-        let elapsedTime = (this.game.engine.getDeltaTime() / 1000);
-
-        this.player.position.z += this.playerSpeed * elapsedTime;
-        
-
-        if(this.game.keys.up && this.player.position.y < 4) {
-            this.player.position.y += (this.playerSpeed) * elapsedTime;
-        } else {
-            if(this.player.position.y > 0.25) {
-                this.player.position.y -= (this.playerSpeed) * elapsedTime;
-            }
-        }
-
-        if(this.game.keys.left) {
-            this.player.position.x -= (this.playerSpeed / 3) * elapsedTime;
-        }
-
-        if(this.game.keys.right) {
-            this.player.position.x += (this.playerSpeed / 3) * elapsedTime;
-        }
-        
-        if(this.game.keys.down) {
-            this.player.scaling.y = 0.5;
-            this.playerSpeed = 20;
-            //this.player.position.y = 0.125;
-        } else {
-            this.playerSpeed = 15;
-            this.player.scaling.y = 1;
-            //this.player.position.y = 0.25;
-        }
+        this.player.move();
 
     }
     
