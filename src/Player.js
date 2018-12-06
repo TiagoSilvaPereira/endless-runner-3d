@@ -4,10 +4,13 @@ class Player {
         
         this.scene = scene;
         
-        this.speed = 100;
+        this.defaultSpeed = 15;
+        this.speed = this.defaultSpeed;
 
         this.gravity = -12;
         
+        this.onDie = null;
+
         /**
          * Used to store the travelled distance and calculate where to generate more level tiles
          * and to give points to the player
@@ -52,8 +55,7 @@ class Player {
 
         this.mesh.moveWithCollisions(new BABYLON.Vector3(
             0, 
-            //this.gravity / 100, 
-            0,
+            this.gravity / 100, 
             this.speed * elapsedTime
         ));
         
@@ -74,11 +76,15 @@ class Player {
         if(GAME.keys.down) {
             this.mesh.scaling.y = 0.5;
             this.mesh.setEllipsoidPerBoundingBox();
-            this.speed = 20;
+            this.speed = this.defaultSpeed * 1.5;
         } else {
-            this.speed = 15;
+            this.speed = this.defaultSpeed;
             this.mesh.setEllipsoidPerBoundingBox();
             this.mesh.scaling.y = 1;
+        }
+
+        if(this.mesh.position.y <= -5) {
+            this.die();
         }
 
     }
@@ -98,6 +104,12 @@ class Player {
 
     getTravelledDistance() {
         return this.travelledDistance;
+    }
+
+    die() {
+        if(this.onDie) {
+            this.onDie();
+        }
     }
 
 }

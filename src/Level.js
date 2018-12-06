@@ -36,12 +36,9 @@ class Level {
         var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), this.scene);
         var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), this.scene);
 
+        this.createPlayer();
         this.generateGroundTiles();
 
-        // Creates the player and set it as camera target
-        this.player = new Player();
-        camera.target = this.player.getMesh();
-        camera.lockedTarget = this.player.getMesh();
 
         this.scene.registerBeforeRender(
             this.beforeRender.bind(this)
@@ -61,6 +58,17 @@ class Level {
         return camera;
     }
 
+    createPlayer() {
+        // Creates the player and set it as camera target
+        this.player = new Player();
+        this.scene.activeCamera.target = this.player.getMesh();
+        this.scene.activeCamera.lockedTarget = this.player.getMesh();
+
+        this.player.onDie = () => {
+            console.log('Die')
+        }
+    }
+
     generateGroundTiles() {
 
         // We'll use this array to determine the type of ground to create
@@ -75,11 +83,15 @@ class Level {
         // Let's generate the next 10 ground tiles (or holes :D) - 100 "meters" or tiles
         for(var generatedTilesNumber = 0; generatedTilesNumber < 10; generatedTilesNumber++) {
             
+            let tyleType = 'NORMAL_GROUND';
             this.generatedTilesNumber++;
 
-            // Choose a tyle type randomly
-            let randomTileTypeNumber = Math.floor((Math.random() * tileTypes.length));
-            let tyleType = tileTypes[randomTileTypeNumber];
+            // If the player is starting to play (first 50 'meters'), creates normal ground tiles
+            if(this.generatedTilesNumber > 5) {
+                // Choose a tyle type randomly
+                let randomTileTypeNumber = Math.floor((Math.random() * tileTypes.length));
+                tyleType = tileTypes[randomTileTypeNumber];
+            }
 
             // Prevents generating multiple holes or tiles with obstacles in sequence
             if((this.lastTileType != 'NORMAL_GROUND') && (tyleType != 'NORMAL_GROUND')) {
@@ -171,6 +183,21 @@ class Level {
 
         obstacle.position.z = tile.position.z;
         obstacle.position.y = 1.5;
+
+        // Player dies when intersects this obstacle
+        let playerMesh = this.player.getMesh();
+        obstacle.actionManager = new BABYLON.ActionManager(this.scene);
+        obstacle.actionManager.registerAction(
+            new BABYLON.ExecuteCodeAction(
+                {
+                    trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
+                    parameter: playerMesh
+                },
+                () => { this.player.die() }
+            )
+        );
+
+        console.log(obstacle.actions)
 
     }
 
