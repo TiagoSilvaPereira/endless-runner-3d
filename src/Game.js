@@ -19,11 +19,12 @@ class Game {
         this.engine = new BABYLON.Engine(this.canvas, true);
 
         this.currentLevel = null;
-        this.currentLevelNumber = 1;
-        
-        this.levels = [
-            new Level()
-        ];
+        this.currentLevelName = 'HomeMenuLevel';
+
+        this.levels = {
+            'HomeMenuLevel': new HomeMenuLevel(),
+            'RunnerLevel': new RunnerLevel()
+        };
 
     }
 
@@ -35,14 +36,16 @@ class Game {
 
     pause() {
         this.paused = true;
+        //this.engine.stopRenderLoop();
     }
 
     isPaused() {
         return this.paused;
     }
 
-    continue() {
+    resume() {
         this.paused = false;
+        //this.renderLoop();
     }
 
     listenKeys() {
@@ -85,23 +88,42 @@ class Game {
         }
     }
 
+    goToLevel(levelName) {
+
+        if(!this.levels[levelName]) {
+            console.error('A level with name ' + levelName + ' does not exists');
+            return;
+        }
+
+        if(this.currentLevel) {
+            this.currentLevel.exit();
+        }
+
+        this.currentLevelName = levelName;
+        this.startLevel();
+    }
+
     startLevel() {
 
-        this.currentLevel = this.levels[this.currentLevelNumber - 1];
+        this.currentLevel = this.levels[this.currentLevelName];
         this.currentLevel.start();
 
     }
 
     render() {
 
-        this.engine.runRenderLoop(() => { 
-            this.currentLevel.scene.render();
-        });
+        this.renderLoop();
 
         window.addEventListener("resize", () => { 
             this.engine.resize();
         });
 
+    }
+
+    renderLoop() {
+        this.engine.runRenderLoop(() => {
+            this.currentLevel.scene.render();
+        });
     }
 
     drawEllipsoid(mesh) {
