@@ -12,8 +12,6 @@ class RunnerLevel extends Level {
         this.canGenerateMoreTiles = false;
         this.lastTileType = 'HOLE';
         this.generatedTilesNumber = 0;
-        // It is used to make hole's on the map, increment the position with the hole size
-        this.currentTilePositionIncrementer = 0;
 
     }
 
@@ -48,19 +46,17 @@ class RunnerLevel extends Level {
     }
 
     createMenu() {
-        let menuTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("runnerMenuUI");
+        this.menu = new UI('runnerMenuUI');
+        
+        /*this.menu.addButton('returnButton', 'Return to Game', {
+            'onclick': () => {}
+        });*/
 
-        let playButton = BABYLON.GUI.Button.CreateSimpleButton("playButton", "Play Game");
-        playButton.width = 0.2;
-        playButton.height = "40px";
-        playButton.color = "white";
-        playButton.background = "green";
-
-        playButton.onPointerUpObservable.add(function() {
-            GAME.goToLevel('RunnerLevel');
+        this.menu.addButton('replayButton', 'Replay Game', {
+            'onclick': () => this.replay() 
         });
 
-        menuTexture.addControl(playButton);
+        this.menu.hide();
     }
 
     createArcCamera() {
@@ -81,6 +77,7 @@ class RunnerLevel extends Level {
 
         this.player.onDie = () => {
             GAME.pause();
+            this.menu.show();
         }
     }
 
@@ -185,7 +182,6 @@ class RunnerLevel extends Level {
     }
 
     createHoleTile(tileNumber) {
-        //this.currentTilePositionIncrementer = this.holeDepth;
     }
 
     generateGroundTilesWithObstacleTile() {
@@ -244,13 +240,44 @@ class RunnerLevel extends Level {
 
     }
 
+    replay() {
+        
+        this.disposeAllTiles();
+        this.player.reset();
+
+        this.lastTileType = 'HOLE';
+        this.generatedTilesNumber = 0;
+        this.generateGroundTiles();
+        
+        this.menu.hide();
+        GAME.resume();
+
+    }
+
     /**
-     * Dispose old tiles and obstacles (last 10 unused tiles and their obstacles)
+     * Disposes old tiles and obstacles (last 10 unused tiles and their obstacles)
      */
     disposeOldTiles() {
         let fromTile = this.generatedTilesNumber - 20,
-            toTile = this.generatedTilesNumber - 10,
-            meshToDispose = null;
+            toTile = this.generatedTilesNumber - 10;
+
+        this.disposeTiles(fromTile, toTile);
+    }
+
+    /**
+     * Disposes all level tiles to restart the level
+     */
+    disposeAllTiles() {
+        this.disposeTiles(0, this.generatedTilesNumber);
+    }
+
+    /**
+     * Disposes the level tiles using the specified identifiers
+     * @param {*} fromTile 
+     * @param {*} toTile 
+     */
+    disposeTiles(fromTile, toTile) {
+        let meshToDispose = null;
         
         for(; fromTile < toTile; fromTile++) {
             let tileName = 'groundTile' + fromTile,

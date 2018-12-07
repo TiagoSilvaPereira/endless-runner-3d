@@ -106,6 +106,14 @@ class Player {
         return this.travelledDistance;
     }
 
+    reset() {
+        this.mesh.position.x = 0;
+        this.mesh.position.y = 0.25;
+        this.mesh.position.z = 0;
+        this.travelledDistance = 0;
+        this.totalTravelledDistance = 0;
+    }
+
     die() {
         if(this.onDie) {
             this.onDie();

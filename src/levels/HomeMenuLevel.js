@@ -14,19 +14,11 @@ class HomeMenuLevel extends Level {
         this.scene = new BABYLON.Scene(GAME.engine);
         var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), this.scene);
 
-        var menuTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("homeMenuUI");
-
-        var playButton = BABYLON.GUI.Button.CreateSimpleButton("playButton", "Play Game");
-        playButton.width = 0.2;
-        playButton.height = "40px";
-        playButton.color = "white";
-        playButton.background = "green";
-
-        playButton.onPointerUpObservable.add(function() {
-            GAME.goToLevel('RunnerLevel');
+        var menu = new UI('homeMenuUI');
+        
+        menu.addButton('playButton', 'Play Game', {
+            'onclick': () => GAME.goToLevel('RunnerLevel')
         });
-
-        menuTexture.addControl(playButton);
         
         this.scene.registerBeforeRender(
             this.beforeRender.bind(this)
