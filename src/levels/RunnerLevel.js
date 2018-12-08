@@ -145,7 +145,7 @@ class RunnerLevel extends Level {
         let tileTypes = [
             'NORMAL_GROUND',
             'SMALL_GROUND',
-            'HOLE',
+            'HOLE', // If the tile is HOLE, we'll don't generate anything
             'GROUND_WITH_TOTAL_OBSTACLE',
             'GROUND_WITH_HIGH_OBSTACLE'
         ], 
@@ -171,10 +171,6 @@ class RunnerLevel extends Level {
 
         if(tyleType == 'SMALL_GROUND') {
             this.createSmallGroundTile();
-        }
-
-        if(tyleType == 'HOLE') {
-            this.createHoleTile();
         }
 
         if(tyleType == 'GROUND_WITH_TOTAL_OBSTACLE') {
@@ -228,9 +224,6 @@ class RunnerLevel extends Level {
         tile.position.y = -0.5;
     }
 
-    createHoleTile(tileNumber) {
-    }
-
     generateGroundTilesWithObstacleTile() {
 
         let tile = this.createTile();
@@ -272,8 +265,12 @@ class RunnerLevel extends Level {
 
     replay() {
         
+        /**
+         * Wee need to dispose the current colliders and tiles on scene to prevent trash objects
+         */
         this.disposeColliders();
         this.disposeAllTiles();
+
         this.player.reset();
 
         this.lastTileType = 'HOLE';
