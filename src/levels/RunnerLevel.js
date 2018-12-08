@@ -9,9 +9,10 @@ class RunnerLevel extends Level {
 
         this.tileDepth = 10;
         this.holeDepth = 10;
-        this.canGenerateMoreTiles = false;
+        this.maxTilesAtTime = 20;
         this.lastTileType = 'HOLE';
         this.generatedTilesNumber = 0;
+        this.canGenerateMoreTiles = false;
 
     }
 
@@ -82,6 +83,46 @@ class RunnerLevel extends Level {
     }
 
     generateGroundTiles() {
+        
+        // Let's generate the next 20 ground tiles (or holes :D) - 200 "meters" or tiles
+        for(var currentTilesNumber = 1; currentTilesNumber <= this.maxTilesAtTime; currentTilesNumber++) {
+            
+            // If is the first tile at time, adds a collisor (this collisor will be used to delete the old tiles)
+            // whenever the player intersects it.
+            // Sets visible to true to see this collisor
+            if(currentTilesNumber == 1) {
+                this.addCollisor('deleteOldObjectsCollisor', {
+                    width: 10, height: 10, depth: 1,
+                    x:0, y: 5, z: 20,
+                    collisionMesh: this.player.getMesh(),
+                    onCollide: () => {
+                        console.log('collided')
+                    },
+                    visible: true
+                });
+            }
+
+            // If is the tenth tile, we'll add a collisor to generate more tile when collides with it
+            // Sets visible to true to see this collisor
+            if(currentTilesNumber == 10) {
+                this.addCollisor('deleteOldObjectsCollisor', {
+                    width: 10, height: 10, depth: 1,
+                    x:0, y: 5, z: 100,
+                    collisionMesh: this.player.getMesh(),
+                    onCollide: () => {
+                        console.log('collided to create')
+                    },
+                    visible: true
+                });
+            }
+
+            this.createTiles();
+
+        }
+
+    }
+
+    createTiles() {
 
         // We'll use this array to determine the type of ground to create
         let tileTypes = [
@@ -90,50 +131,45 @@ class RunnerLevel extends Level {
             'HOLE',
             'GROUND_WITH_TOTAL_OBSTACLE',
             'GROUND_WITH_HIGH_OBSTACLE'
-        ];
-        
-        // Let's generate the next 10 ground tiles (or holes :D) - 100 "meters" or tiles
-        for(var generatedTilesNumber = 0; generatedTilesNumber < 10; generatedTilesNumber++) {
-            
-            let tyleType = 'NORMAL_GROUND';
-            this.generatedTilesNumber++;
+        ], 
+        tyleType = 'NORMAL_GROUND';
 
-            // If the player is starting to play (first 50 'meters'), creates normal ground tiles
-            if(this.generatedTilesNumber > 5) {
-                // Choose a tyle type randomly
-                let randomTileTypeNumber = Math.floor((Math.random() * tileTypes.length));
-                tyleType = tileTypes[randomTileTypeNumber];
-            }
+        // Increment the global level number of generated tiles
+        this.generatedTilesNumber++;
 
-            // Prevents generating multiple holes or tiles with obstacles in sequence
-            if((this.lastTileType != 'NORMAL_GROUND') && (tyleType != 'NORMAL_GROUND')) {
-                tyleType = 'NORMAL_GROUND';
-            }
-
-            this.lastTileType = tyleType;
-
-            if(tyleType == 'NORMAL_GROUND') {
-                this.createNormalGroundTile();
-            }
-
-            if(tyleType == 'SMALL_GROUND') {
-                this.createSmallGroundTile();
-            }
-
-            if(tyleType == 'HOLE') {
-                this.createHoleTile();
-            }
-
-            if(tyleType == 'GROUND_WITH_TOTAL_OBSTACLE') {
-                this.generateGroundTilesWithObstacleTile();
-            }
-
-            if(tyleType == 'GROUND_WITH_HIGH_OBSTACLE') {
-                this.generateGroundTilesWithHighObstacleTile();
-            }
-
+        // If the player is starting to play (first 50 'meters'), creates normal ground tiles
+        if(this.generatedTilesNumber > 5) {
+            // Choose a tyle type randomly
+            let randomTileTypeNumber = Math.floor((Math.random() * tileTypes.length));
+            tyleType = tileTypes[randomTileTypeNumber];
         }
 
+        // Prevents generating multiple holes or tiles with obstacles in sequence
+        if((this.lastTileType != 'NORMAL_GROUND') && (tyleType != 'NORMAL_GROUND')) {
+            tyleType = 'NORMAL_GROUND';
+        }
+
+        this.lastTileType = tyleType;
+
+        if(tyleType == 'NORMAL_GROUND') {
+            this.createNormalGroundTile();
+        }
+
+        if(tyleType == 'SMALL_GROUND') {
+            this.createSmallGroundTile();
+        }
+
+        if(tyleType == 'HOLE') {
+            this.createHoleTile();
+        }
+
+        if(tyleType == 'GROUND_WITH_TOTAL_OBSTACLE') {
+            this.generateGroundTilesWithObstacleTile();
+        }
+
+        if(tyleType == 'GROUND_WITH_HIGH_OBSTACLE') {
+            this.generateGroundTilesWithHighObstacleTile();
+        }
     }
 
     createTile(options) {
@@ -159,9 +195,6 @@ class RunnerLevel extends Level {
 
         // Freeze material to improve performance (this material will not be modified)
         tileMaterial.freeze();
-
-        // Freeze transformations in this tile to improve performance
-        //tile.freezeWorldMatrix();
 
         return tile;
 
@@ -222,19 +255,19 @@ class RunnerLevel extends Level {
 
             this.player.move();
     
-            // If player travelled distance was reseted (is lower than 70),
-            // then I can dispose old tiles and allow to generate more ground tiles
-            if(this.player.getTravelledDistance() < 10 && !this.canGenerateMoreTiles) {
-                this.disposeOldTiles();
-                this.canGenerateMoreTiles = true;
-            }
+            // // If player travelled distance was reseted (is beetween 25 and 30),
+            // // then I can dispose old tiles and allow to generate more ground tiles
+            // if(this.player.getTravelledDistance() > 25 && this.player.getTravelledDistance() < 30 && !this.canGenerateMoreTiles) {
+            //     this.disposeOldTiles();
+            //     this.canGenerateMoreTiles = true;
+            // }
     
-            // If player has travelled more 70 "meters", needs to generate more ground tiles,
-            // and block more tiles generation until that the distance was reseted
-            if(this.player.getTravelledDistance() >= 70 && this.canGenerateMoreTiles) {
-                this.generateGroundTiles();
-                this.canGenerateMoreTiles = false;
-            }
+            // // If player has travelled more 70 "meters", needs to generate more ground tiles,
+            // // and block more tiles generation until that the distance was reseted
+            // if(this.player.getTravelledDistance() >= 70 && this.canGenerateMoreTiles) {
+            //     this.generateGroundTiles();
+            //     this.canGenerateMoreTiles = false;
+            // }
 
         }
 
@@ -255,11 +288,11 @@ class RunnerLevel extends Level {
     }
 
     /**
-     * Disposes old tiles and obstacles (last 10 unused tiles and their obstacles)
+     * Disposes old tiles and obstacles (last 20 unused tiles and their obstacles)
      */
     disposeOldTiles() {
-        let fromTile = this.generatedTilesNumber - 20,
-            toTile = this.generatedTilesNumber - 10;
+        let fromTile = this.generatedTilesNumber - (this.maxTilesAtTime * 2),
+            toTile = this.generatedTilesNumber - this.maxTilesAtTime;
 
         this.disposeTiles(fromTile, toTile);
     }
@@ -279,7 +312,7 @@ class RunnerLevel extends Level {
     disposeTiles(fromTile, toTile) {
         let meshToDispose = null;
         
-        for(; fromTile < toTile; fromTile++) {
+        for(; fromTile <= toTile; fromTile++) {
             let tileName = 'groundTile' + fromTile,
                 obstacleName = 'obstacleTile' + fromTile;
             

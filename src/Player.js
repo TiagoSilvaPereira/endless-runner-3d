@@ -2,6 +2,11 @@ class Player {
 
     constructor(scene) {
         
+        /**
+         * Set it to true to make the player indestructible for tests
+         */
+        this.godMode = true;
+
         this.scene = scene;
         
         this.defaultSpeed = 15;
@@ -51,11 +56,12 @@ class Player {
 
     move() {
 
-        let elapsedTime = (GAME.engine.getDeltaTime() / 1000);
+        let elapsedTime = (GAME.engine.getDeltaTime() / 1000),
+            gravity = (this.godMode) ? 0 : (this.gravity / 100);
 
         this.mesh.moveWithCollisions(new BABYLON.Vector3(
             0, 
-            this.gravity / 100, 
+            gravity, 
             this.speed * elapsedTime
         ));
         
@@ -83,7 +89,7 @@ class Player {
             this.mesh.scaling.y = 1;
         }
 
-        if(this.mesh.position.y <= -5) {
+        if(this.mesh.position.y <= -2) {
             this.die();
         }
 
@@ -115,7 +121,7 @@ class Player {
     }
 
     die() {
-        if(this.onDie) {
+        if(this.onDie && !this.godMode) {
             this.onDie();
         }
     }
