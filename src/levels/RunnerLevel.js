@@ -72,7 +72,7 @@ class RunnerLevel extends Level {
 
     createPlayer() {
         // Creates the player and set it as camera target
-        this.player = new Player();
+        this.player = new Player(this.scene);
         this.scene.activeCamera.target = this.player.getMesh();
         this.scene.activeCamera.lockedTarget = this.player.getMesh();
 
@@ -89,17 +89,17 @@ class RunnerLevel extends Level {
         for(var currentTilesNumber = 1; currentTilesNumber <= this.maxTilesAtTime; currentTilesNumber++) {
             
             // Increment the global level number of generated tiles
-            this.generatedTilesNumber++;
+            this.generatedTilesNumber += 1;
 
-            // Collisors default options (the collisors will be used to throw actions actions like: dispose old tiles, 
+            // Colliders default options (the colliders will be used to throw actions actions like: dispose old tiles, 
             // generate more tiles, etc)
-            // Set visible to true to see the collisors on the scene
-            let collisorsDefaultOptions = {
-                width: 50, 
-                height: 50, 
+            // Set visible to true to see the colliders on the scene
+            let collidersDefaultOptions = {
+                width: 100, 
+                height: 100, 
                 depth: 1,
                 x:0, 
-                y: 25, 
+                y: 0, 
                 z: ((this.generatedTilesNumber - 1) * this.tileDepth),
                 collisionMesh: this.player.getMesh(),
                 visible: true,
@@ -107,30 +107,30 @@ class RunnerLevel extends Level {
             };
 
             // If is the first tile at time (skips first generation because is not necessary), 
-            // adds a collisor (this collisor will be used to delete the old tiles)
+            // adds a collider (this collider will be used to delete the old tiles)
             // whenever the player intersects it.
             if(currentTilesNumber == 1 && this.generatedTilesNumber != 1) {
             
                 // Copy default options
-                let collisorOptions = Object.assign({}, collisorsDefaultOptions);
-                collisorOptions.onCollide = () => {
+                let colliderOptions = Object.assign({}, collidersDefaultOptions);
+                colliderOptions.onCollide = () => {
                     this.disposeOldTiles();
                 }
                 
-                this.addCollisor('deleteOldTilesCollisor', collisorOptions);
+                this.addCollider('deleteOldTilesCollider', colliderOptions);
 
             }
 
-            // If is the tenth tile (10), we'll add a collisor to generate more tile when collides with it
+            // If is the tenth tile (10), we'll add a collider to generate more tile when collides with it
             if(currentTilesNumber == 10) {
                 
                 // Copy default options
-                let collisorOptions = Object.assign({}, collisorsDefaultOptions);
-                collisorOptions.onCollide = () => {
+                let colliderOptions = Object.assign({}, collidersDefaultOptions);
+                colliderOptions.onCollide = () => {
                     this.generateGroundTiles()
                 }
 
-                this.addCollisor('generateMoreTilesCollisor', collisorOptions);
+                this.addCollider('generateMoreTilesCollider', colliderOptions);
             }
 
             this.createTiles();
@@ -268,11 +268,11 @@ class RunnerLevel extends Level {
         if(!GAME.isPaused()) {
             this.player.move();
         }
-
     }
 
     replay() {
         
+        this.disposeColliders();
         this.disposeAllTiles();
         this.player.reset();
 

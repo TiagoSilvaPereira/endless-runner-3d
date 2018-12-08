@@ -9,38 +9,41 @@ class Level {
     }
 
     /**
-     * Adds a collisor to the level scene. It will fire the options.onCollide callback
+     * Adds a collider to the level scene. It will fire the options.onCollide callback
      * when the collider intersects options.collisionMesh. It can be used to fire actions when
      * player enters an area for example.
      * @param {*} name 
      * @param {*} options 
      */
-    addCollisor(name, options) {
+    addCollider(name, options) {
         
-        let collisor = BABYLON.MeshBuilder.CreateBox(name, {
+        let collider = BABYLON.MeshBuilder.CreateBox(name, {
             width: options.width, 
             height: options.height, 
             depth: options.depth
         }, this.scene);
 
-        collisor.position.x = options.x || 0;
-        collisor.position.y = options.y || 0;
-        collisor.position.z = options.z || 0;
+        // Add a tag to identify the object as collider and to simplify group operations (like dispose)
+        BABYLON.Tags.AddTagsTo(collider, 'collider boxCollider');
 
-        collisor.isVisible = (options.visible) ? options.visible : false;
+        collider.position.x = options.x || 0;
+        collider.position.y = options.y || 0;
+        collider.position.z = options.z || 0;
 
-        if(collisor.isVisible) {
-            let collisorMaterial = new BABYLON.StandardMaterial(name + 'Material');
-            collisorMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0);
-            collisorMaterial.alpha = 0.5;
+        collider.isVisible = (options.visible) ? options.visible : false;
 
-            collisor.material = collisorMaterial;
+        if(collider.isVisible) {
+            let colliderMaterial = new BABYLON.StandardMaterial(name + 'Material');
+            colliderMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0);
+            colliderMaterial.alpha = 0.5;
+
+            collider.material = colliderMaterial;
         }
 
         options.timeToDispose = (options.timeToDispose) ? options.timeToDispose : 0;
 
-        collisor.actionManager = new BABYLON.ActionManager(this.scene);
-        collisor.actionManager.registerAction(
+        collider.actionManager = new BABYLON.ActionManager(this.scene);
+        collider.actionManager.registerAction(
             new BABYLON.ExecuteCodeAction(
                 {
                     trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
@@ -53,18 +56,26 @@ class Level {
                         options.onCollide();
                     }
                     
-                    // If true, will dispose the collisor after timeToDispose
+                    // If true, will dispose the collider after timeToDispose
                     if(options.disposeAfterCollision) {
                         setTimeout(() => {
-                            collisor.dispose();
+                            collider.dispose();
                         }, options.timeToDispose);
                     }
                 }
             )
         );
 
-        return collisor;
+        return collider;
 
+    }
+
+    disposeColliders() {
+        let colliders = this.scene.getMeshesByTags('collider');
+
+        for(var index = 0; index < colliders.length; index++) {
+            colliders[index].dispose();
+        }
     }
 
     beforeRender() {

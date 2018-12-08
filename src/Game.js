@@ -30,13 +30,13 @@ class Game {
 
     start() {
         this.listenKeys();
+        this.listenOtherEvents();
         this.startLevel();
         this.render();
     }
 
     pause() {
         this.paused = true;
-        //this.engine.stopRenderLoop();
     }
 
     isPaused() {
@@ -45,7 +45,6 @@ class Game {
 
     resume() {
         this.paused = false;
-        //this.renderLoop();
     }
 
     listenKeys() {
@@ -78,7 +77,6 @@ class Game {
                 this.keys.up = 0;
             }else if (e.keyCode == 83) {//Arrow Down
                 this.keys.down = 0;
-                
             } else if (e.keyCode == 65) {//Arrow Left
                 this.keys.left = 0;
                 
@@ -86,6 +84,16 @@ class Game {
                 this.keys.right = 0;
             }
         }
+    }
+
+    listenOtherEvents() {
+        window.addEventListener('blur', () => {
+            this.pause();
+        });
+
+        window.addEventListener('focus', () => {
+            this.resume();
+        });
     }
 
     goToLevel(levelName) {

@@ -5,7 +5,7 @@ class Player {
         /**
          * Set it to true to make the player indestructible for tests
          */
-        this.godMode = true;
+        this.godMode = false;
 
         this.scene = scene;
         
