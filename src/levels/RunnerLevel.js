@@ -7,12 +7,12 @@ class RunnerLevel extends Level {
         this.scene = null;
         this.player = null;
 
+        // Tiles generation control properties
         this.tileDepth = 10;
         this.holeDepth = 10;
         this.maxTilesAtTime = 20;
         this.lastTileType = 'HOLE';
         this.generatedTilesNumber = 0;
-        this.canGenerateMoreTiles = false;
 
     }
 
@@ -76,6 +76,7 @@ class RunnerLevel extends Level {
         this.scene.activeCamera.target = this.player.getMesh();
         this.scene.activeCamera.lockedTarget = this.player.getMesh();
 
+        // Actions when player dies
         this.player.onDie = () => {
             GAME.pause();
             this.menu.show();
@@ -84,42 +85,52 @@ class RunnerLevel extends Level {
 
     generateGroundTiles() {
         
-        // Let's generate the next 20 ground tiles (or holes :D) - 200 "meters" or tiles
+        // Let's generate the next 20 ground tiles (or holes :D) - 200 "meters" of tiles
         for(var currentTilesNumber = 1; currentTilesNumber <= this.maxTilesAtTime; currentTilesNumber++) {
             
             // Increment the global level number of generated tiles
             this.generatedTilesNumber++;
 
-            // If is the first tile at time (skips first generation), 
-            //adds a collisor (this collisor will be used to delete the old tiles)
+            // Collisors default options (the collisors will be used to throw actions actions like: dispose old tiles, 
+            // generate more tiles, etc)
+            // Set visible to true to see the collisors on the scene
+            let collisorsDefaultOptions = {
+                width: 50, 
+                height: 50, 
+                depth: 1,
+                x:0, 
+                y: 25, 
+                z: ((this.generatedTilesNumber - 1) * this.tileDepth),
+                collisionMesh: this.player.getMesh(),
+                visible: true,
+                disposeAfterCollision: true
+            };
+
+            // If is the first tile at time (skips first generation because is not necessary), 
+            // adds a collisor (this collisor will be used to delete the old tiles)
             // whenever the player intersects it.
-            // Sets visible to true to see this collisor
-            if(currentTilesNumber == 1) {
-                this.addCollisor('deleteOldTilesCollisor', {
-                    width: 50, height: 50, depth: 1,
-                    x:0, y: 25, z: ((this.generatedTilesNumber - 1) * this.tileDepth),
-                    collisionMesh: this.player.getMesh(),
-                    onCollide: () => {
-                        this.disposeOldTiles();
-                    },
-                    visible: true,
-                    disposeAfterCollision: true
-                });
+            if(currentTilesNumber == 1 && this.generatedTilesNumber != 1) {
+            
+                // Copy default options
+                let collisorOptions = Object.assign({}, collisorsDefaultOptions);
+                collisorOptions.onCollide = () => {
+                    this.disposeOldTiles();
+                }
+                
+                this.addCollisor('deleteOldTilesCollisor', collisorOptions);
+
             }
 
-            // If is the tenth tile, we'll add a collisor to generate more tile when collides with it
-            // Sets visible to true to see this collisor
+            // If is the tenth tile (10), we'll add a collisor to generate more tile when collides with it
             if(currentTilesNumber == 10) {
-                this.addCollisor('generateMoreTilesCollisor', {
-                    width: 50, height: 50, depth: 1,
-                    x:0, y: 25, z: ((this.generatedTilesNumber - 1) * this.tileDepth),
-                    collisionMesh: this.player.getMesh(),
-                    onCollide: () => {
-                        this.generateGroundTiles()
-                    },
-                    visible: true,
-                    disposeAfterCollision: true
-                });
+                
+                // Copy default options
+                let collisorOptions = Object.assign({}, collisorsDefaultOptions);
+                collisorOptions.onCollide = () => {
+                    this.generateGroundTiles()
+                }
+
+                this.addCollisor('generateMoreTilesCollisor', collisorOptions);
             }
 
             this.createTiles();

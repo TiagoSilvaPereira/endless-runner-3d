@@ -27,7 +27,7 @@ class Level {
         collisor.position.y = options.y || 0;
         collisor.position.z = options.z || 0;
 
-        collisor.isVisible = (options.visible) ? options.visible : true;
+        collisor.isVisible = (options.visible) ? options.visible : false;
 
         if(collisor.isVisible) {
             let collisorMaterial = new BABYLON.StandardMaterial(name + 'Material');
