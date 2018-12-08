@@ -90,32 +90,35 @@ class RunnerLevel extends Level {
             // Increment the global level number of generated tiles
             this.generatedTilesNumber++;
 
-            // If is the first tile at time, adds a collisor (this collisor will be used to delete the old tiles)
+            // If is the first tile at time (skips first generation), 
+            //adds a collisor (this collisor will be used to delete the old tiles)
             // whenever the player intersects it.
             // Sets visible to true to see this collisor
             if(currentTilesNumber == 1) {
-                this.addCollisor('deleteOldObjectsCollisor', {
-                    width: 10, height: 10, depth: 1,
-                    x:0, y: 5, z: ((this.generatedTilesNumber - 1) * this.tileDepth),
+                this.addCollisor('deleteOldTilesCollisor', {
+                    width: 50, height: 50, depth: 1,
+                    x:0, y: 25, z: ((this.generatedTilesNumber - 1) * this.tileDepth),
                     collisionMesh: this.player.getMesh(),
                     onCollide: () => {
                         this.disposeOldTiles();
                     },
-                    visible: true
+                    visible: true,
+                    disposeAfterCollision: true
                 });
             }
 
             // If is the tenth tile, we'll add a collisor to generate more tile when collides with it
             // Sets visible to true to see this collisor
             if(currentTilesNumber == 10) {
-                this.addCollisor('deleteOldObjectsCollisor', {
-                    width: 10, height: 10, depth: 1,
-                    x:0, y: 5, z: ((this.generatedTilesNumber - 1) * this.tileDepth),
+                this.addCollisor('generateMoreTilesCollisor', {
+                    width: 50, height: 50, depth: 1,
+                    x:0, y: 25, z: ((this.generatedTilesNumber - 1) * this.tileDepth),
                     collisionMesh: this.player.getMesh(),
                     onCollide: () => {
                         this.generateGroundTiles()
                     },
-                    visible: true
+                    visible: true,
+                    disposeAfterCollision: true
                 });
             }
 
@@ -252,23 +255,7 @@ class RunnerLevel extends Level {
 
     beforeRender() {
         if(!GAME.isPaused()) {
-
             this.player.move();
-    
-            // // If player travelled distance was reseted (is beetween 25 and 30),
-            // // then I can dispose old tiles and allow to generate more ground tiles
-            // if(this.player.getTravelledDistance() > 25 && this.player.getTravelledDistance() < 30 && !this.canGenerateMoreTiles) {
-            //     this.disposeOldTiles();
-            //     this.canGenerateMoreTiles = true;
-            // }
-    
-            // // If player has travelled more 70 "meters", needs to generate more ground tiles,
-            // // and block more tiles generation until that the distance was reseted
-            // if(this.player.getTravelledDistance() >= 70 && this.canGenerateMoreTiles) {
-            //     this.generateGroundTiles();
-            //     this.canGenerateMoreTiles = false;
-            // }
-
         }
 
     }

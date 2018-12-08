@@ -37,6 +37,8 @@ class Level {
             collisor.material = collisorMaterial;
         }
 
+        options.timeToDispose = (options.timeToDispose) ? options.timeToDispose : 0;
+
         collisor.actionManager = new BABYLON.ActionManager(this.scene);
         collisor.actionManager.registerAction(
             new BABYLON.ExecuteCodeAction(
@@ -45,8 +47,17 @@ class Level {
                     parameter: options.collisionMesh
                 },
                 () => { 
+
+                    // Runs onCollide callback if exists
                     if(options.onCollide) {
                         options.onCollide();
+                    }
+                    
+                    // If true, will dispose the collisor after timeToDispose
+                    if(options.disposeAfterCollision) {
+                        setTimeout(() => {
+                            collisor.dispose();
+                        }, options.timeToDispose);
                     }
                 }
             )
