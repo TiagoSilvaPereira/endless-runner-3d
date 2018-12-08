@@ -87,16 +87,19 @@ class RunnerLevel extends Level {
         // Let's generate the next 20 ground tiles (or holes :D) - 200 "meters" or tiles
         for(var currentTilesNumber = 1; currentTilesNumber <= this.maxTilesAtTime; currentTilesNumber++) {
             
+            // Increment the global level number of generated tiles
+            this.generatedTilesNumber++;
+
             // If is the first tile at time, adds a collisor (this collisor will be used to delete the old tiles)
             // whenever the player intersects it.
             // Sets visible to true to see this collisor
             if(currentTilesNumber == 1) {
                 this.addCollisor('deleteOldObjectsCollisor', {
                     width: 10, height: 10, depth: 1,
-                    x:0, y: 5, z: 20,
+                    x:0, y: 5, z: ((this.generatedTilesNumber - 1) * this.tileDepth),
                     collisionMesh: this.player.getMesh(),
                     onCollide: () => {
-                        console.log('collided')
+                        this.disposeOldTiles();
                     },
                     visible: true
                 });
@@ -107,10 +110,10 @@ class RunnerLevel extends Level {
             if(currentTilesNumber == 10) {
                 this.addCollisor('deleteOldObjectsCollisor', {
                     width: 10, height: 10, depth: 1,
-                    x:0, y: 5, z: 100,
+                    x:0, y: 5, z: ((this.generatedTilesNumber - 1) * this.tileDepth),
                     collisionMesh: this.player.getMesh(),
                     onCollide: () => {
-                        console.log('collided to create')
+                        this.generateGroundTiles()
                     },
                     visible: true
                 });
@@ -133,9 +136,6 @@ class RunnerLevel extends Level {
             'GROUND_WITH_HIGH_OBSTACLE'
         ], 
         tyleType = 'NORMAL_GROUND';
-
-        // Increment the global level number of generated tiles
-        this.generatedTilesNumber++;
 
         // If the player is starting to play (first 50 'meters'), creates normal ground tiles
         if(this.generatedTilesNumber > 5) {
