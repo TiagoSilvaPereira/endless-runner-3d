@@ -71,6 +71,10 @@ class Player {
         this.statuses[status] = value;
     }
 
+    getMesh() {
+        return this.mesh;
+    }
+
     move() {
 
         let elapsedTime = (GAME.engine.getDeltaTime() / 1000),
@@ -87,52 +91,18 @@ class Player {
             runSpeed
         ));
         
+        this.checkPlayerLateralMovement(elapsedTime);
         this.calculateTravelledDistance(elapsedTime);
         
-        if(this.mesh.position.y < this.lastAltitude) {
-            this.setStatus('FALLING_DOWN', true);
-        } else {
-            this.setStatus('FALLING_DOWN', false);
-        }
-
-        this.lastAltitude = this.mesh.position.y;
-
-        if(GAME.keys.left) {
-            this.mesh.position.x -= (this.speed / 5) * elapsedTime;
-        }
-
-        if(GAME.keys.right) {
-            this.mesh.position.x += (this.speed / 5) * elapsedTime;
-        }
-
-        // Player JUMPING
-        if(GAME.keys.up && !this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
-            this.setStatus('JUMPING', true);
-        }
-
-        if(this.mesh.position.y >= this.jumpMaxAltitude && this.statuses.JUMPING) {
-            this.setStatus('JUMPING', false);
-        }
+        this.checkPlayerJump();
+        this.checkPlayerAltitude();
+        this.checkPlayerDragging();
         
-        // Player DRAGGING
-        if(GAME.keys.down) {
-            this.mesh.scaling.y = 0.5;
-            this.mesh.setEllipsoidPerBoundingBox();
-            this.speed = this.defaultSpeed * 1.5;
-        } else {
-            this.speed = this.defaultSpeed;
-            this.mesh.setEllipsoidPerBoundingBox();
-            this.mesh.scaling.y = 1;
-        }
 
         if(this.mesh.position.y <= -2) {
             this.die();
         }
 
-    }
-
-    getMesh() {
-        return this.mesh;
     }
 
     calculateTravelledDistance(elapsedTime) {
@@ -142,6 +112,64 @@ class Player {
 
         this.travelledDistance += this.speed * elapsedTime;
         this.totalTravelledDistance += this.speed * elapsedTime;
+    }
+
+    checkPlayerAltitude() {
+        if(this.mesh.position.y < this.lastAltitude) {
+            this.setStatus('FALLING_DOWN', true);
+        } else {
+            this.setStatus('FALLING_DOWN', false);
+        }
+
+        this.lastAltitude = this.mesh.position.y;
+    }
+
+    checkPlayerLateralMovement(elapsedTime) {
+        if(GAME.keys.left && !this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
+            this.mesh.position.x -= (this.speed / 5) * elapsedTime;
+        }
+
+        if(GAME.keys.right && !this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
+            this.mesh.position.x += (this.speed / 5) * elapsedTime;
+        }
+    }
+
+    checkPlayerJump() {
+        if(GAME.keys.up && !this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
+            this.setStatus('JUMPING', true);
+        }
+
+        /**
+         * If the player reaches the jump max altitude, then we change JUMPING status to false
+         * and "hack" the lastAltitude adding more 1 unit (it is necessary because the method checkPlayerAltitude will
+         * detect FALLING_DOWN only on the next animation frame if we dont make it, 
+         * and it will crash the method checkPlayerDragging, immediataly setting the player position 
+         * to the initial position)
+         */
+        if(this.mesh.position.y >= this.jumpMaxAltitude && this.statuses.JUMPING) {
+            this.lastAltitude = this.lastAltitude + 1; // Hacking lastAltitude (explained above)
+            this.setStatus('JUMPING', false);
+        }
+    }
+
+    checkPlayerDragging() {
+        if(GAME.keys.down) {
+            
+            this.setStatus('DRAGGING', true);
+            this.mesh.scaling.y = 0.5;
+            this.mesh.setEllipsoidPerBoundingBox();
+            
+        } else {
+            
+            if(!this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
+                this.mesh.position.y = 0.25;
+            }
+
+            this.setStatus('DRAGGING', false);
+            this.mesh.scaling.y = 1;
+            this.mesh.setEllipsoidPerBoundingBox();
+        }
+        
     }
 
     getTravelledDistance() {
