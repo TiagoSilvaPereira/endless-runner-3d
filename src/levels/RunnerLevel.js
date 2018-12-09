@@ -102,7 +102,7 @@ class RunnerLevel extends Level {
                 y: 0, 
                 z: ((this.generatedTilesNumber - 1) * this.tileDepth),
                 collisionMesh: this.player.getMesh(),
-                visible: true,
+                visible: false,
                 disposeAfterCollision: true
             };
 
@@ -149,7 +149,6 @@ class RunnerLevel extends Level {
          */
         let tileTypes = [
             'NORMAL_GROUND',
-            'NORMAL_GROUND',
             'SMALL_GROUND',
             'NORMAL_GROUND',
             'NORMAL_GROUND',
@@ -157,7 +156,6 @@ class RunnerLevel extends Level {
             'NORMAL_GROUND',
             'NORMAL_GROUND',
             'GROUND_WITH_TOTAL_OBSTACLE',
-            'NORMAL_GROUND',
             'NORMAL_GROUND',
             'GROUND_WITH_HIGH_OBSTACLE'
         ], 
