@@ -141,12 +141,24 @@ class RunnerLevel extends Level {
 
     createTiles() {
 
-        // We'll use this array to determine the type of ground to create
+        /**
+         * We'll use this array to determine the type of ground to create. We are 
+         * repeating the NORMAL_GROUND type to decrease the chances of generating
+         * obstacles and holes. It is an easy way to control the chances to add obstacles
+         * and holes
+         */
         let tileTypes = [
             'NORMAL_GROUND',
+            'NORMAL_GROUND',
             'SMALL_GROUND',
+            'NORMAL_GROUND',
+            'NORMAL_GROUND',
             'HOLE', // If the tile is HOLE, we'll don't generate anything
+            'NORMAL_GROUND',
+            'NORMAL_GROUND',
             'GROUND_WITH_TOTAL_OBSTACLE',
+            'NORMAL_GROUND',
+            'NORMAL_GROUND',
             'GROUND_WITH_HIGH_OBSTACLE'
         ], 
         tyleType = 'NORMAL_GROUND';

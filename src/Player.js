@@ -2,18 +2,31 @@ class Player {
 
     constructor(scene) {
         
+        this.scene = scene;
+
+        this.statuses = {
+            'RUNNING': true,
+            'JUMPING': false,
+            'DRAGGING': false,
+            'FALLING_DOWN' : false
+        };
+
         /**
          * Set it to true to make the player indestructible for tests
          */
         this.godMode = false;
 
-        this.scene = scene;
-        
         this.defaultSpeed = 15;
         this.speed = this.defaultSpeed;
 
         this.gravity = -12;
         
+        /**
+         * Stores the player last altitude to check if the player is falling down
+         */
+        this.lastAltitude = 0.25;
+        this.jumpMaxAltitude = 4.5;
+
         this.onDie = null;
 
         /**
@@ -54,31 +67,54 @@ class Player {
 
     }
 
+    setStatus(status, value = true) {
+        this.statuses[status] = value;
+    }
+
     move() {
 
         let elapsedTime = (GAME.engine.getDeltaTime() / 1000),
-            gravity = (this.godMode) ? 0 : (this.gravity / 100);
+            gravity = (this.godMode) ? 0 : (this.gravity / 100),
+            jump = (this.statuses.JUMPING && !this.statuses.FALLING_DOWN) ? 1 : 0,
+            runSpeed = this.speed * elapsedTime;
+
+        // If is jumping, multiply the speed by 1.5
+        runSpeed *= (this.statuses.JUMPING) ? 1.5 : 1;
 
         this.mesh.moveWithCollisions(new BABYLON.Vector3(
             0, 
-            gravity, 
-            this.speed * elapsedTime
+            gravity + jump, 
+            runSpeed
         ));
         
         this.calculateTravelledDistance(elapsedTime);
-
-        if(GAME.keys.up && this.mesh.position.y < 4) {
-            this.mesh.position.y += (this.speed) * elapsedTime;
+        
+        if(this.mesh.position.y < this.lastAltitude) {
+            this.setStatus('FALLING_DOWN', true);
+        } else {
+            this.setStatus('FALLING_DOWN', false);
         }
 
+        this.lastAltitude = this.mesh.position.y;
+
         if(GAME.keys.left) {
-            this.mesh.position.x -= (this.speed / 3) * elapsedTime;
+            this.mesh.position.x -= (this.speed / 5) * elapsedTime;
         }
 
         if(GAME.keys.right) {
-            this.mesh.position.x += (this.speed / 3) * elapsedTime;
+            this.mesh.position.x += (this.speed / 5) * elapsedTime;
+        }
+
+        // Player JUMPING
+        if(GAME.keys.up && !this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
+            this.setStatus('JUMPING', true);
+        }
+
+        if(this.mesh.position.y >= this.jumpMaxAltitude && this.statuses.JUMPING) {
+            this.setStatus('JUMPING', false);
         }
         
+        // Player DRAGGING
         if(GAME.keys.down) {
             this.mesh.scaling.y = 0.5;
             this.mesh.setEllipsoidPerBoundingBox();
