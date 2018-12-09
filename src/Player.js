@@ -16,7 +16,7 @@ class Player {
          */
         this.godMode = false;
 
-        this.defaultSpeed = 20;
+        this.defaultSpeed = 15;
         this.speed = this.defaultSpeed;
 
         this.gravity = -12;

@@ -31,8 +31,9 @@ class RunnerLevel extends Level {
         camera.attachControl(GAME.canvas, true);
 
         // Add lights to the scene
-        var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), this.scene);
-        var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), this.scene);
+        var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 10, 0), this.scene);
+        var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 100, -100), this.scene);
+        light2.intensity = 0.4;
 
         var skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", this.scene);
         skyboxMaterial.backFaceCulling = false;
@@ -224,8 +225,32 @@ class RunnerLevel extends Level {
         // Freeze material to improve performance (this material will not be modified)
         tileMaterial.freeze();
 
+        /**
+         * 20% chances to generate coins on the tile
+         */
+        if(Math.floor((Math.random() * 100)) > 80) {
+            this.createCoins(tile);
+        }
+
         return tile;
 
+    }
+
+    createCoins(tile) {
+        let coinMaterial = new BABYLON.StandardMaterial('coinMaterial');
+        coinMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0);
+        coinMaterial.emissiveColor = new BABYLON.Color3(0.4, 0.4, 0);
+
+        for(var coinsNumber = 0; coinsNumber < 5; coinsNumber++) {
+
+            let coin = BABYLON.MeshBuilder.CreateBox("coin" + coinsNumber + this.generatedTilesNumber, {width: 0.1, height: 0.1, depth: 0.1}, this.scene);
+            coin.material = coinMaterial.clone();
+            
+            coin.position.x = tile.position.x;
+            coin.position.z = (tile.position.z - (this.tileDepth / 2)) + (coinsNumber * 2);
+            coin.position.y = 0.3;
+
+        }
     }
 
     createNormalGroundTile() {
