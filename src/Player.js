@@ -16,7 +16,7 @@ class Player {
          */
         this.godMode = false;
 
-        this.defaultSpeed = 15;
+        this.defaultSpeed = 20;
         this.speed = this.defaultSpeed;
 
         this.gravity = -12;
@@ -57,13 +57,12 @@ class Player {
 
         let playerMaterial = new BABYLON.StandardMaterial("playerMaterial", this.scene);
         playerMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1);
-        playerMaterial.alpha = 0.5;
 
         this.mesh.material = playerMaterial;
 
         this.mesh.setEllipsoidPerBoundingBox();
 
-        GAME.drawEllipsoid(this.mesh);
+        //GAME.drawEllipsoid(this.mesh);
 
     }
 
@@ -158,6 +157,7 @@ class Player {
             this.setStatus('DRAGGING', true);
             this.mesh.scaling.y = 0.5;
             this.mesh.setEllipsoidPerBoundingBox();
+            this.speed = this.defaultSpeed * 1.5;
             
         } else {
             
@@ -168,6 +168,8 @@ class Player {
             this.setStatus('DRAGGING', false);
             this.mesh.scaling.y = 1;
             this.mesh.setEllipsoidPerBoundingBox();
+            this.speed = this.defaultSpeed;
+            
         }
         
     }

@@ -34,6 +34,14 @@ class RunnerLevel extends Level {
         var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), this.scene);
         var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), this.scene);
 
+        var skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", this.scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.inclination = -0.3;
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, this.scene);
+        skybox.material = skyboxMaterial;
+        skybox.infiniteDistance = true;
+
+
         this.createPlayer();
         this.generateGroundTiles();
 
