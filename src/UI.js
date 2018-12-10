@@ -9,10 +9,10 @@ class UI {
     addButton(name, text, options = {}) {
         let button = BABYLON.GUI.Button.CreateSimpleButton(name, text);
         
-        button.width = options.width || 0.2;
-        button.height = options.height || '40px';
-        button.color = options.color || 'white';
-        button.background = options.background || 'green';
+        button.width = options.width || 0.5;
+        button.height = options.height || '60px';
+        button.color = options.color || 'black';
+        button.background = options.background || 'white';
 
         if(options.onclick) {
             button.onPointerUpObservable.add(options.onclick);
@@ -22,6 +22,25 @@ class UI {
         this.controls.push(button);
 
         return button;
+    }
+
+    addText(text, options = {}) {
+        let textControl = new BABYLON.GUI.TextBlock();
+        textControl.text = text;
+        textControl.color = options.color || 'white';
+        textControl.fontSize = options.fontSize || 28;
+        textControl.outlineWidth = options.outlineWidth || 2;
+        textControl.outlineColor = options.outlineColor || "black";
+        textControl.lineSpacing = options.lineSpacing || '5px';
+        textControl.left = options.left || '0px';
+        textControl.top = options.top || '0px';
+        textControl.textHorizontalAlignment = options.horizontalAlignment || BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+        textControl.textVerticalAlignment = options.verticalAlignment || BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        
+        this.menuTexture.addControl(textControl);
+        this.controls.push(textControl);
+
+        return textControl;
     }
 
     show() {

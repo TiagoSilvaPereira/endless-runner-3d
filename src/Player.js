@@ -12,6 +12,12 @@ class Player {
         };
 
         /**
+         * HUD Controls
+         */
+        this.coinsTextControl = null;
+        this.metersTextControl = null;
+
+        /**
          * Set it to true to make the player indestructible for tests
          */
         this.godMode = false;
@@ -64,8 +70,26 @@ class Player {
 
         this.mesh.setEllipsoidPerBoundingBox();
 
+        this.createHUD();
+
         //GAME.drawEllipsoid(this.mesh);
 
+    }
+
+    createHUD() {
+        this.hud = new UI('playerHudUI');
+        
+        this.metersTextControl = this.hud.addText('Meters: 0', {
+            'top': '10px',
+            'left': '10px',
+            'horizontalAlignment': BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT
+        });
+
+        this.coinsTextControl = this.hud.addText('Coins: 0', {
+            'top': '10px',
+            'left': '-10px',
+            'horizontalAlignment': BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT
+        });
     }
 
     setStatus(status, value = true) {
@@ -113,6 +137,8 @@ class Player {
 
         this.travelledDistance += this.speed * elapsedTime;
         this.totalTravelledDistance += this.speed * elapsedTime;
+
+        this.metersTextControl.text = 'Meters: ' + Math.floor(this.totalTravelledDistance);
     }
 
     checkPlayerAltitude() {
@@ -182,7 +208,7 @@ class Player {
 
     keepCoin() {
         this.coins++;
-        console.log(this.coins)
+        this.coinsTextControl.text = 'Coins: ' + this.coins;
     }
 
     reset() {

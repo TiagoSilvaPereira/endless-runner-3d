@@ -23,6 +23,9 @@ class RunnerLevel extends Level {
         this.scene = new BABYLON.Scene(GAME.engine);
         this.scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
 
+        // Adding an action manager to this scene
+        this.scene.actionManager = new BABYLON.ActionManager(this.scene);
+
         this.createMenu();
 
         var camera = this.createArcCamera();
@@ -36,12 +39,12 @@ class RunnerLevel extends Level {
         var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 100, -100), this.scene);
         light2.intensity = 0.4;
 
-        var skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", this.scene);
-        skyboxMaterial.backFaceCulling = false;
-        skyboxMaterial.inclination = -0.3;
-        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, this.scene);
-        skybox.material = skyboxMaterial;
-        skybox.infiniteDistance = true;
+        // var skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", this.scene);
+        // skyboxMaterial.backFaceCulling = false;
+        // skyboxMaterial.inclination = -0.3;
+        // var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, this.scene);
+        // skybox.material = skyboxMaterial;
+        // skybox.infiniteDistance = true;
 
         this.createPlayer();
         this.generateGroundTiles();
@@ -267,8 +270,18 @@ class RunnerLevel extends Level {
                         parameter: playerMesh
                     },
                     () => { 
-                        console.log('here')
-                        coin.position.y = 10; // Needs interpolation here
+
+                        let interpolateCoinAltitudeAction = new BABYLON.InterpolateValueAction(
+                            BABYLON.ActionManager.NothingTrigger,
+                            coin.position,
+                            'y',
+                            10,
+                            500 // 500 ms
+                        );
+
+                        this.scene.actionManager.registerAction(interpolateCoinAltitudeAction);
+                        interpolateCoinAltitudeAction.execute();
+
                         this.player.keepCoin() 
                     }
                 )
@@ -280,8 +293,8 @@ class RunnerLevel extends Level {
     createNormalGroundTile() {
         let tile = this.createTile();
         
-        // 20% chances to generate coins on the tile
-        if(Math.floor((Math.random() * 100)) > 80) {
+        // 40% chances to generate coins on the tile
+        if(Math.floor((Math.random() * 100)) > 60) {
             this.createCoins(tile);
         }
     }
