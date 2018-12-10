@@ -13,6 +13,7 @@ class RunnerLevel extends Level {
         this.maxTilesAtTime = 20;
         this.lastTileType = 'HOLE';
         this.generatedTilesNumber = 0;
+        this.generatedTilesBlocksNumber = 0;
 
     }
 
@@ -41,7 +42,6 @@ class RunnerLevel extends Level {
         var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, this.scene);
         skybox.material = skyboxMaterial;
         skybox.infiniteDistance = true;
-
 
         this.createPlayer();
         this.generateGroundTiles();
@@ -93,6 +93,9 @@ class RunnerLevel extends Level {
     }
 
     generateGroundTiles() {
+        
+        // Increases the number of generated tile blocks (to add tags on objects and easily dispose them)
+        this.generatedTilesBlocksNumber += 1;
         
         // Let's generate the next 20 ground tiles (or holes :D) - 200 "meters" of tiles
         for(var currentTilesNumber = 1; currentTilesNumber <= this.maxTilesAtTime; currentTilesNumber++) {
@@ -206,7 +209,8 @@ class RunnerLevel extends Level {
         options = options ? options : { width: 1, height: 1, depth: this.tileDepth };
 
         let tile = BABYLON.MeshBuilder.CreateBox("groundTile" + this.generatedTilesNumber, options, this.scene);
-
+        BABYLON.Tags.AddTagsTo(tile, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
+        
         let tileMaterial = new BABYLON.StandardMaterial("tileMaterial", this.scene);
             
         tile.position.z = ((this.generatedTilesNumber - 1) * this.tileDepth);
@@ -244,6 +248,8 @@ class RunnerLevel extends Level {
         for(var coinsNumber = 0; coinsNumber < 5; coinsNumber++) {
 
             let coin = BABYLON.MeshBuilder.CreateBox("coin" + coinsNumber + this.generatedTilesNumber, {width: 0.1, height: 0.1, depth: 0.1}, this.scene);
+            BABYLON.Tags.AddTagsTo(coin, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
+            
             coin.material = coinMaterial.clone();
             
             coin.position.x = tile.position.x;
@@ -271,7 +277,8 @@ class RunnerLevel extends Level {
 
         let tile = this.createTile();
         let obstacle = BABYLON.MeshBuilder.CreateBox("obstacleTile" + this.generatedTilesNumber, {width: 1, height: 0.25, depth: 0.25}, this.scene);
-
+        BABYLON.Tags.AddTagsTo(obstacle, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
+        
         obstacle.position.z = tile.position.z;
         obstacle.position.y = 0.125;
 
@@ -281,7 +288,8 @@ class RunnerLevel extends Level {
 
         let tile = this.createTile(tileNumber);
         let obstacle = BABYLON.MeshBuilder.CreateBox("obstacleTile" + this.generatedTilesNumber, {width: 2, height: 2, depth: 0.25}, this.scene);
-
+        BABYLON.Tags.AddTagsTo(obstacle, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
+        
         obstacle.position.z = tile.position.z;
         obstacle.position.y = 1.5;
 
@@ -329,38 +337,22 @@ class RunnerLevel extends Level {
      * Disposes old tiles and obstacles (last 20 unused tiles and their obstacles)
      */
     disposeOldTiles() {
-        let fromTile = this.generatedTilesNumber - (this.maxTilesAtTime * 2),
-            toTile = this.generatedTilesNumber - this.maxTilesAtTime;
+        let lastTilesBlock = this.generatedTilesBlocksNumber - 1,
+            tilesBlocks = this.scene.getMeshesByTags('tilesBlock' + lastTilesBlock);
 
-        this.disposeTiles(fromTile, toTile);
+        for(var index = 0; index < tilesBlocks.length; index++) {
+            tilesBlocks[index].dispose();
+        }
     }
 
     /**
      * Disposes all level tiles to restart the level
      */
     disposeAllTiles() {
-        this.disposeTiles(0, this.generatedTilesNumber);
-    }
+        let tilesBlocks = this.scene.getMeshesByTags('tilesBlock');
 
-    /**
-     * Disposes the level tiles using the specified identifiers
-     * @param {*} fromTile 
-     * @param {*} toTile 
-     */
-    disposeTiles(fromTile, toTile) {
-        let meshToDispose = null;
-        
-        for(; fromTile <= toTile; fromTile++) {
-            let tileName = 'groundTile' + fromTile,
-                obstacleName = 'obstacleTile' + fromTile;
-            
-            if(meshToDispose = this.scene.getMeshByName(tileName)) {
-                meshToDispose.dispose();
-            }
-
-            if(meshToDispose = this.scene.getMeshByName(obstacleName)) {
-                meshToDispose.dispose();
-            }
+        for(var index = 0; index < tilesBlocks.length; index++) {
+            tilesBlocks[index].dispose();
         }
     }
     
