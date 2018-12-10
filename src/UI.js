@@ -34,8 +34,8 @@ class UI {
         textControl.lineSpacing = options.lineSpacing || '5px';
         textControl.left = options.left || '0px';
         textControl.top = options.top || '0px';
-        textControl.textHorizontalAlignment = options.horizontalAlignment || BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-        textControl.textVerticalAlignment = options.verticalAlignment || BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        textControl.textHorizontalAlignment = (typeof options.horizontalAlignment !== 'undefined') ? options.horizontalAlignment : BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+        textControl.textVerticalAlignment = (typeof options.verticalAlignment !== 'undefined') ? options.verticalAlignment : BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
         
         this.menuTexture.addControl(textControl);
         this.controls.push(textControl);
