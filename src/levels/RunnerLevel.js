@@ -229,17 +229,14 @@ class RunnerLevel extends Level {
         // Freeze material to improve performance (this material will not be modified)
         tileMaterial.freeze();
 
-        /**
-         * 20% chances to generate coins on the tile
-         */
-        if(Math.floor((Math.random() * 100)) > 80) {
-            this.createCoins(tile);
-        }
-
         return tile;
 
     }
 
+    /**
+     * Create coins for an specific tile 
+     * @param {*} tile 
+     */
     createCoins(tile) {
         let coinMaterial = new BABYLON.StandardMaterial('coinMaterial');
         coinMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0);
@@ -256,11 +253,37 @@ class RunnerLevel extends Level {
             coin.position.z = (tile.position.z - (this.tileDepth / 2)) + (coinsNumber * 2);
             coin.position.y = 0.3;
 
+            let playerMesh = this.player.getMesh();
+            coin.actionManager = new BABYLON.ActionManager(this.scene);
+            
+            /**
+             * If the player collides with the Coin, we'll keep the coin and then interpolate
+             * the coin altitude to up
+             */
+            coin.actionManager.registerAction(
+                new BABYLON.ExecuteCodeAction(
+                    {
+                        trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
+                        parameter: playerMesh
+                    },
+                    () => { 
+                        console.log('here')
+                        coin.position.y = 10; // Needs interpolation here
+                        this.player.keepCoin() 
+                    }
+                )
+            );
+
         }
     }
 
     createNormalGroundTile() {
-        this.createTile();
+        let tile = this.createTile();
+        
+        // 20% chances to generate coins on the tile
+        if(Math.floor((Math.random() * 100)) > 80) {
+            this.createCoins(tile);
+        }
     }
 
     createSmallGroundTile() {
@@ -271,6 +294,9 @@ class RunnerLevel extends Level {
 
         tile.position.x = (randomSideChooser <= 50) ? -0.3333 : 0.3333;
         tile.position.y = -0.5;
+
+        // Small tiles always have coins
+        this.createCoins(tile);
     }
 
     generateGroundTilesWithObstacleTile() {
@@ -292,6 +318,9 @@ class RunnerLevel extends Level {
         
         obstacle.position.z = tile.position.z;
         obstacle.position.y = 1.5;
+
+        // Tiles with high obstacle always have coins
+        this.createCoins(tile);
 
         // Player dies when intersects this obstacle
         let playerMesh = this.player.getMesh();

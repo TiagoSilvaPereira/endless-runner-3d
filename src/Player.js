@@ -27,6 +27,8 @@ class Player {
         this.lastAltitude = 0.25;
         this.jumpMaxAltitude = 4.5;
 
+        this.coins = 0;
+
         this.onDie = null;
 
         /**
@@ -176,6 +178,11 @@ class Player {
 
     getTravelledDistance() {
         return this.travelledDistance;
+    }
+
+    keepCoin() {
+        this.coins++;
+        console.log(this.coins)
     }
 
     reset() {
