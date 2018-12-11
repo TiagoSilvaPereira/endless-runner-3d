@@ -26,6 +26,8 @@ class RunnerLevel extends Level {
         // Adding an action manager to this scene
         this.scene.actionManager = new BABYLON.ActionManager(this.scene);
 
+        this.createDefaultMaterials();
+
         this.createMenu();
 
         var camera = this.createArcCamera();
@@ -56,6 +58,14 @@ class RunnerLevel extends Level {
 
         return this.scene;
 
+    }
+
+    createDefaultMaterials() {
+        let coinMaterial = new BABYLON.StandardMaterial('coinMaterial', this.scene);
+        coinMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0);
+        coinMaterial.emissiveColor = new BABYLON.Color3(0.4, 0.4, 0);
+
+        this.addMaterial(coinMaterial);
     }
 
     createMenu() {
@@ -240,19 +250,30 @@ class RunnerLevel extends Level {
      * Create coins for an specific tile 
      * @param {*} tile 
      */
-    createCoins(tile) {
-        let coinMaterial = new BABYLON.StandardMaterial('coinMaterial');
-        coinMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0);
-        coinMaterial.emissiveColor = new BABYLON.Color3(0.4, 0.4, 0);
+    createCoins(tile, randomPosition = false) {
+
+        let positionX = tile.position.x;
+        
+        if(randomPosition) {
+            let randomPositionChooser = Math.floor((Math.random() * 100)); // 0 to 100 random number
+
+            if(randomPositionChooser <= 33) {
+                positionX = -0.3333;
+            }
+            
+            if(randomPositionChooser >= 66) {
+                positionX = 0.3333;
+            }
+        }
 
         for(var coinsNumber = 0; coinsNumber < 5; coinsNumber++) {
 
             let coin = BABYLON.MeshBuilder.CreateBox("coin" + coinsNumber + this.generatedTilesNumber, {width: 0.1, height: 0.1, depth: 0.1}, this.scene);
             BABYLON.Tags.AddTagsTo(coin, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
             
-            coin.material = coinMaterial.clone();
+            coin.material = this.getMaterial('coinMaterial');
             
-            coin.position.x = tile.position.x;
+            coin.position.x = positionX;
             coin.position.z = (tile.position.z - (this.tileDepth / 2)) + (coinsNumber * 2);
             coin.position.y = 0.3;
 
@@ -295,7 +316,7 @@ class RunnerLevel extends Level {
         
         // 40% chances to generate coins on the tile
         if(Math.floor((Math.random() * 100)) > 60) {
-            this.createCoins(tile);
+            this.createCoins(tile, true);
         }
     }
 
@@ -333,7 +354,7 @@ class RunnerLevel extends Level {
         obstacle.position.y = 1.5;
 
         // Tiles with high obstacle always have coins
-        this.createCoins(tile);
+        this.createCoins(tile, true);
 
         // Player dies when intersects this obstacle
         let playerMesh = this.player.getMesh();

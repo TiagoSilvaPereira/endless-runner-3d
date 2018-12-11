@@ -1,5 +1,16 @@
 class Level {
 
+    
+
+    constructor() {
+        
+        /**
+         * We can use this object to store materials that can be reused along the game
+         */
+        this.materials = {};
+
+    }
+
     start() {
         this.createScene();
     }
@@ -75,6 +86,22 @@ class Level {
 
         for(var index = 0; index < colliders.length; index++) {
             colliders[index].dispose();
+        }
+    }
+
+    addMaterial(material) {
+        this.materials[material.name] = material;
+    }
+
+    getMaterial(materialName) {
+        return this.materials[materialName];
+    }
+
+    removeMaterial(materialName) {
+        let material = null;
+        if(material = this.materials[materialName]) {
+            material.dispose();
+            delete this.materials[materialName];
         }
     }
 
