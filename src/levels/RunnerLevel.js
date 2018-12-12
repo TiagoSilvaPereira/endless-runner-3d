@@ -6,6 +6,7 @@ class RunnerLevel extends Level {
 
         this.scene = null;
         this.player = null;
+        this.pursuer = null;
 
         // Tiles generation control properties
         this.tileDepth = 10;
@@ -26,7 +27,7 @@ class RunnerLevel extends Level {
         // Adding an action manager to this scene
         this.scene.actionManager = new BABYLON.ActionManager(this.scene);
 
-        this.createDefaultMaterials();
+        this.createCommonMaterials();
 
         this.createMenu();
 
@@ -41,14 +42,16 @@ class RunnerLevel extends Level {
         var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 100, -100), this.scene);
         light2.intensity = 0.4;
 
-        // var skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", this.scene);
-        // skyboxMaterial.backFaceCulling = false;
-        // skyboxMaterial.inclination = -0.3;
-        // var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, this.scene);
-        // skybox.material = skyboxMaterial;
-        // skybox.infiniteDistance = true;
+        var skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", this.scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.inclination = -0.3;
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, this.scene);
+        skybox.material = skyboxMaterial;
+        skybox.infiniteDistance = true;
 
         this.createPlayer();
+        //this.createPursuer();
+
         this.generateGroundTiles();
 
 
@@ -60,7 +63,7 @@ class RunnerLevel extends Level {
 
     }
 
-    createDefaultMaterials() {
+    createCommonMaterials() {
         let coinMaterial = new BABYLON.StandardMaterial('coinMaterial', this.scene);
         coinMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0);
         coinMaterial.emissiveColor = new BABYLON.Color3(0.4, 0.4, 0);

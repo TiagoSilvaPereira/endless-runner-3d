@@ -1,0 +1,7 @@
+class Pursuer {
+
+    constructor(level) {
+        
+    }
+
+}
