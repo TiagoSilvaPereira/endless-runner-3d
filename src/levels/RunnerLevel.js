@@ -8,6 +8,9 @@ class RunnerLevel extends Level {
         this.player = null;
         this.pursuer = null;
 
+        this.gotCoinSound = null;
+        this.playerDieSound = null;
+
         // Tiles generation control properties
         this.tileDepth = 10;
         this.holeDepth = 10;
@@ -23,6 +26,10 @@ class RunnerLevel extends Level {
         // Create the scene space
         this.scene = new BABYLON.Scene(GAME.engine);
         this.scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
+
+        var music = new BABYLON.Sound('music', '/assets/musics/Guitar-Mayhem.mp3', this.scene, null, { loop: true, autoplay: true, volume: 0.7 });
+        this.gotCoinSound = new BABYLON.Sound('gotCoinSound', '/assets/sounds/coin-c-09.wav', this.scene);
+        this.playerDieSound = new BABYLON.Sound('playerDieSound', '/assets/sounds/game-die.mp3', this.scene, null, {volume: 0.4});
 
         // Adding an action manager to this scene
         this.scene.actionManager = new BABYLON.ActionManager(this.scene);
@@ -103,6 +110,7 @@ class RunnerLevel extends Level {
 
         // Actions when player dies
         this.player.onDie = () => {
+            this.playerDieSound.play();
             GAME.pause();
             this.menu.show();
         }
@@ -306,7 +314,8 @@ class RunnerLevel extends Level {
                         this.scene.actionManager.registerAction(interpolateCoinAltitudeAction);
                         interpolateCoinAltitudeAction.execute();
 
-                        this.player.keepCoin() 
+                        this.player.keepCoin();
+                        this.gotCoinSound.play();
                     }
                 )
             );
