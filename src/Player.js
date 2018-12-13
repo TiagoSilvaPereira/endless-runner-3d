@@ -26,13 +26,13 @@ class Player {
         this.defaultSpeed = 15;
         this.speed = this.defaultSpeed;
 
-        this.gravity = -12;
+        this.gravity = -9;
         
         /**
          * Stores the player last altitude to check if the player is falling down
          */
-        this.jumpForce = 0.8;
-        this.jumpMaxAltitude = 3.2;
+        this.jumpForce = 50;
+        this.jumpMaxAltitude = 4.7;
         
         // Stores the last player altitude from every frame
         this.lastAltitude = 0.25;
@@ -107,8 +107,8 @@ class Player {
     move() {
 
         let animationRatio = (this.scene.getAnimationRatio() / 50),
-            gravity = (this.godMode) ? 0 : (this.gravity / 100),
-            jump = (this.statuses.JUMPING && !this.statuses.FALLING_DOWN) ? this.jumpForce : 0,
+            gravity = (this.godMode) ? 0 : (this.gravity  * animationRatio),
+            jump = (this.statuses.JUMPING && !this.statuses.FALLING_DOWN) ? this.jumpForce  * animationRatio : 0,
             runSpeed = this.speed * animationRatio;
 
         // If is jumping, multiply the speed by 1.5
