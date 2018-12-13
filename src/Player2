@@ -30,8 +30,8 @@ class Player {
         /**
          * Stores the player last altitude to check if the player is falling down
          */
-        this.jumpForce = 0.8;
-        this.jumpMaxAltitude = 3.2;
+        this.jumpForce = 0.6;
+        this.jumpMaxAltitude = 3.1;
         
         // Stores the last player altitude from every frame
         this.lastAltitude = 0.25;
