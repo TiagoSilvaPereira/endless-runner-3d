@@ -75,7 +75,20 @@ class RunnerLevel extends Level {
         coinMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0);
         coinMaterial.emissiveColor = new BABYLON.Color3(0.4, 0.4, 0);
 
+        let tileMaterialWhite = new BABYLON.StandardMaterial("tileMaterialWhite", this.scene);
+        tileMaterialWhite.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+        
+        let tileMaterialRed = new BABYLON.StandardMaterial("tileMaterialRed", this.scene);
+        tileMaterialRed.diffuseColor = new BABYLON.Color3(0.8, 0.3, 0.3);
+        
+        // Freeze materials to improve performance (this material will not be modified)
+        coinMaterial.freeze();
+        tileMaterialWhite.freeze();
+        tileMaterialRed.freeze();
+
         this.addMaterial(coinMaterial);
+        this.addMaterial(tileMaterialWhite);
+        this.addMaterial(tileMaterialRed);
     }
 
     createMenu() {
@@ -252,24 +265,13 @@ class RunnerLevel extends Level {
 
         let tile = BABYLON.MeshBuilder.CreateBox("groundTile" + this.generatedTilesNumber, options, this.scene);
         BABYLON.Tags.AddTagsTo(tile, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
-        
-        let tileMaterial = new BABYLON.StandardMaterial("tileMaterial", this.scene);
             
         tile.position.z = ((this.generatedTilesNumber - 1) * this.tileDepth);
         tile.position.y = -0.5;
 
-        tileMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
-        tile.material = tileMaterial;
-
         tile.checkCollisions = true;
 
-        // Intercaling the ground color
-        if((this.generatedTilesNumber % 2) == 0) {
-            tile.material.diffuseColor = new BABYLON.Color3(0.8, 0.3, 0.3);
-        }
-
-        // Freeze material to improve performance (this material will not be modified)
-        tileMaterial.freeze();
+        tile.material = ((this.generatedTilesNumber % 2) == 0) ? this.getMaterial('tileMaterialWhite') : this.getMaterial('tileMaterialRed');
 
         return tile;
 
