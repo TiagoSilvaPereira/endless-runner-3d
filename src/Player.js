@@ -8,7 +8,8 @@ class Player {
             'RUNNING': true,
             'JUMPING': false,
             'DRAGGING': false,
-            'FALLING_DOWN' : false
+            'FALLING_DOWN' : false,
+            'DEAD': false
         };
 
         /**
@@ -127,7 +128,8 @@ class Player {
         this.checkPlayerDragging();
         
 
-        if(this.mesh.position.y <= -2) {
+        if(this.mesh.position.y <= -2 && !this.statuses.DEAD) {
+            this.setStatus('DEAD', true);
             this.die();
         }
 
@@ -215,11 +217,18 @@ class Player {
     }
 
     reset() {
+        
+        this.setStatus('DEAD', false);
+        this.setStatus('JUMPING', false);
+        this.setStatus('FALLING_DOWN', false);
+        this.setStatus('DRAGGING', false);
+        
         this.mesh.position.x = 0;
         this.mesh.position.y = 0.25;
         this.mesh.position.z = 0;
         this.travelledDistance = 0;
         this.totalTravelledDistance = 0;
+        
     }
 
     die() {
