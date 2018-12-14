@@ -4,7 +4,6 @@ class RunnerLevel extends Level {
         
         super();
 
-        this.scene = null;
         this.player = null;
         this.pursuer = null;
 
@@ -21,10 +20,8 @@ class RunnerLevel extends Level {
 
     }
 
-    createScene() {
-
-        // Create the scene space
-        this.scene = new BABYLON.Scene(GAME.engine);
+    buildScene() {
+        
         this.scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
 
         var music = new BABYLON.Sound('music', '/assets/musics/Guitar-Mayhem.mp3', this.scene, null, { loop: true, autoplay: true, volume: 0.7 });
@@ -60,13 +57,6 @@ class RunnerLevel extends Level {
         this.createPursuer();
 
         this.generateGroundTiles();
-
-
-        this.scene.registerBeforeRender(
-            this.beforeRender.bind(this)
-        );
-
-        return this.scene;
 
     }
 

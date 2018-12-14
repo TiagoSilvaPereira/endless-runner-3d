@@ -9,10 +9,28 @@ class Level {
          */
         this.materials = {};
 
+        this.scene = null;
+
     }
 
     start() {
         this.createScene();
+    }
+
+    createScene() {
+        // Create the scene space
+        this.scene = new BABYLON.Scene(GAME.engine);
+
+        this.buildScene();
+
+        // If has the beforeRender method
+        if(this.beforeRender) {
+            this.scene.registerBeforeRender(
+                this.beforeRender.bind(this)
+            );
+        }
+
+        return this.scene;
     }
 
     exit() {
@@ -103,10 +121,6 @@ class Level {
             material.dispose();
             delete this.materials[materialName];
         }
-    }
-
-    beforeRender() {
-        // Runs on scene loop   
     }
 
 }
