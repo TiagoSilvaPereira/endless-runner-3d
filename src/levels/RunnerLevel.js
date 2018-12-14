@@ -405,6 +405,7 @@ class RunnerLevel extends Level {
         this.disposeAllTiles();
 
         this.player.reset();
+        this.pursuer.approachToChased();
 
         this.lastTileType = 'HOLE';
         this.generatedTilesNumber = 0;
