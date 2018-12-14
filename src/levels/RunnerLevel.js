@@ -42,6 +42,7 @@ class RunnerLevel extends Level {
 
         // This attaches the camera to the canvas
         this.scene.activeCamera = camera;
+        camera.attachControl(GAME.canvas, true);
 
         // Add lights to the scene
         var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 10, 0), this.scene);
@@ -56,7 +57,7 @@ class RunnerLevel extends Level {
         skybox.infiniteDistance = true;
 
         this.createPlayer();
-        //this.createPursuer();
+        this.createPursuer();
 
         this.generateGroundTiles();
 
@@ -126,6 +127,10 @@ class RunnerLevel extends Level {
             GAME.pause();
             this.menu.show();
         }
+    }
+
+    createPursuer() {
+        this.pursuer = new Pursuer(this);
     }
 
     generateGroundTiles() {
@@ -209,8 +214,8 @@ class RunnerLevel extends Level {
         ], 
         tyleType = 'NORMAL_GROUND';
 
-        // If the player is starting to play (first 50 'meters'), creates normal ground tiles
-        if(this.generatedTilesNumber > 5) {
+        // If the player is starting to play (first 200 'meters'), creates normal ground tiles
+        if(this.generatedTilesNumber > 20) {
             // Choose a tyle type randomly
             let randomTileTypeNumber = Math.floor((Math.random() * tileTypes.length));
             tyleType = tileTypes[randomTileTypeNumber];
@@ -387,6 +392,7 @@ class RunnerLevel extends Level {
     beforeRender() {
         if(!GAME.isPaused()) {
             this.player.move();
+            this.pursuer.move();
         }
     }
 
