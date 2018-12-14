@@ -227,11 +227,11 @@ class RunnerLevel extends Level {
         }
 
         if(tyleType == 'GROUND_WITH_TOTAL_OBSTACLE') {
-            this.generateGroundTilesWithObstacleTile();
+            this.createTileWithObstacleTile();
         }
 
         if(tyleType == 'GROUND_WITH_HIGH_OBSTACLE') {
-            this.generateGroundTilesWithHighObstacleTile();
+            this.createTileWithHighObstacleTile();
         }
     }
 
@@ -341,14 +341,14 @@ class RunnerLevel extends Level {
         this.createCoins(tile);
     }
 
-    generateGroundTilesWithObstacleTile() {
+    createTileWithObstacleTile() {
 
         let tile = this.createTile();
-        let obstacle = BABYLON.MeshBuilder.CreateBox("obstacleTile" + this.generatedTilesNumber, {width: 1, height: 0.25, depth: 0.25}, this.scene);
+        let obstacle = BABYLON.MeshBuilder.CreateBox("obstacleTile" + this.generatedTilesNumber, {width: 1, height: 0.2, depth: 9}, this.scene);
         BABYLON.Tags.AddTagsTo(obstacle, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
         
         obstacle.position.z = tile.position.z;
-        obstacle.position.y = 0.125;
+        obstacle.position.y = 0.1;
 
         // Player dies when intersects this obstacle
         let playerMesh = this.player.getMesh();
@@ -365,7 +365,7 @@ class RunnerLevel extends Level {
 
     }
 
-    generateGroundTilesWithHighObstacleTile(tileNumber) {
+    createTileWithHighObstacleTile(tileNumber) {
 
         let tile = this.createTile(tileNumber);
         let obstacle = BABYLON.MeshBuilder.CreateBox("obstacleTile" + this.generatedTilesNumber, {width: 2, height: 2, depth: 0.25}, this.scene);
