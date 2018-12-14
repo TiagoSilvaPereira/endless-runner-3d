@@ -27,9 +27,18 @@ class Pursuer {
 
     approachToChased() {
         this.statuses.CLOSE_TO_CHASED = true;
-
-        this.distanceBeetweenChased = 0.9;
         this.currentChasedTravelledDistance = this.chased.totalTravelledDistance;
+
+        let interpolateDistanceAction = new BABYLON.InterpolateValueAction(
+            BABYLON.ActionManager.NothingTrigger,
+            this,
+            'distanceBeetweenChased',
+            0.9,
+            500
+        );
+
+        this.scene.actionManager.registerAction(interpolateDistanceAction);
+        interpolateDistanceAction.execute();
     }
 
     moveAwayFromChased() {
@@ -41,7 +50,7 @@ class Pursuer {
             this,
             'distanceBeetweenChased',
             1.5,
-            1500
+            5000
         );
 
         this.scene.actionManager.registerAction(interpolateDistanceAction);
@@ -61,7 +70,7 @@ class Pursuer {
 
         this.mesh.rotation.x += 0.1 * animationRatio;
 
-        if((this.chased.totalTravelledDistance - this.currentChasedTravelledDistance) > 50 && this.statuses.CLOSE_TO_CHASED) {
+        if((this.chased.totalTravelledDistance - this.currentChasedTravelledDistance) > 100 && this.statuses.CLOSE_TO_CHASED) {
             this.moveAwayFromChased();
         }
     }

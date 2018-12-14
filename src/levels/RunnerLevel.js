@@ -360,6 +360,19 @@ class RunnerLevel extends Level {
         obstacle.position.z = tile.position.z;
         obstacle.position.y = 0.125;
 
+        // Player dies when intersects this obstacle
+        let playerMesh = this.player.getMesh();
+        obstacle.actionManager = new BABYLON.ActionManager(this.scene);
+        obstacle.actionManager.registerAction(
+            new BABYLON.ExecuteCodeAction(
+                {
+                    trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
+                    parameter: playerMesh
+                },
+                () => { this.pursuer.approachToChased() }
+            )
+        );
+
     }
 
     generateGroundTilesWithHighObstacleTile(tileNumber) {
