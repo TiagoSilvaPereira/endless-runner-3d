@@ -5,13 +5,19 @@ class Pursuer {
         /**
          * Who to chase
          */
-        this.chased = level.player;
-        this.currentChasedTravelledDistance = 0;
-        this.distanceBeetweenChased = 0.9;
+        this.player = level.player;
+        this.currentPlayerTravelledDistance = 0;
+        this.distanceBeetweenPlayer = 0.9;
 
         this.statuses = {
-            'CLOSE_TO_CHASED': true
+            'CLOSE_TO_PLAYER': true
         };
+
+        /**
+         * SOUNDS
+         */
+        this.approachSound = null;
+        this.attackSound = null;
 
         /**
          * The scene
@@ -21,36 +27,41 @@ class Pursuer {
         this.mesh = BABYLON.MeshBuilder.CreateSphere("pursuerSphere", {diameter: 0.25, segments: 2}, this.scene);
         this.mesh.position.x = 0;
         this.mesh.position.y = 0.125;
-        this.mesh.position.z = this.chased.mesh.position.z - this.distanceBeetweenChased;
+        this.mesh.position.z = this.player.mesh.position.z - this.distanceBeetweenPlayer;
+
+        this.approachSound = new BABYLON.Sound('approachSound', '/assets/sounds/monster.wav', this.scene, null);
+        this.attackSound = new BABYLON.Sound('attackSound', '/assets/sounds/monster_attack.mp3', this.scene);
 
     }
 
-    approachToChased() {
-        this.statuses.CLOSE_TO_CHASED = true;
-        this.currentChasedTravelledDistance = this.chased.totalTravelledDistance;
+    approachToPlayer() {
+        this.statuses.CLOSE_TO_PLAYER = true;
+        this.currentPlayerTravelledDistance = this.player.totalTravelledDistance;
 
         let interpolateDistanceAction = new BABYLON.InterpolateValueAction(
             BABYLON.ActionManager.NothingTrigger,
             this,
-            'distanceBeetweenChased',
+            'distanceBeetweenPlayer',
             0.9,
             500
         );
 
         this.scene.actionManager.registerAction(interpolateDistanceAction);
         interpolateDistanceAction.execute();
+
+        this.approachSound.play();
     }
 
-    moveAwayFromChased() {
+    moveAwayFromPlayer() {
 
-        this.statuses.CLOSE_TO_CHASED = false;
+        this.statuses.CLOSE_TO_PLAYER = false;
 
         let interpolateDistanceAction = new BABYLON.InterpolateValueAction(
             BABYLON.ActionManager.NothingTrigger,
             this,
-            'distanceBeetweenChased',
+            'distanceBeetweenPlayer',
             1.5,
-            5000
+            1500
         );
 
         this.scene.actionManager.registerAction(interpolateDistanceAction);
@@ -58,21 +69,41 @@ class Pursuer {
 
     }
 
-    attackChased() {
+    attackPlayer() {
+        this.attackSound.play();
 
+        let interpolateDistanceAction = new BABYLON.InterpolateValueAction(
+            BABYLON.ActionManager.NothingTrigger,
+            this,
+            'distanceBeetweenPlayer',
+            0.1,
+            300
+        );
+
+        this.scene.actionManager.registerAction(interpolateDistanceAction);
+        interpolateDistanceAction.execute();
+        
+        setTimeout(() => {
+            this.player.die();
+        }, 300);
     }
 
     move() {
         let animationRatio = this.scene.getAnimationRatio();
 
-        this.mesh.position.x = this.chased.mesh.position.x;
-        this.mesh.position.z = this.chased.mesh.position.z - this.distanceBeetweenChased;
+        this.mesh.position.x = this.player.mesh.position.x;
+        this.mesh.position.y = 0.125 + (this.player.mesh.position.y - this.player.defaultAltitude);
+        this.mesh.position.z = this.player.mesh.position.z - this.distanceBeetweenPlayer;
 
         this.mesh.rotation.x += 0.1 * animationRatio;
 
-        if((this.chased.totalTravelledDistance - this.currentChasedTravelledDistance) > 100 && this.statuses.CLOSE_TO_CHASED) {
-            this.moveAwayFromChased();
+        if((this.player.totalTravelledDistance - this.currentPlayerTravelledDistance) > 100 && this.statuses.CLOSE_TO_PLAYER) {
+            this.moveAwayFromPlayer();
         }
+    }
+
+    isCloseToPlayer() {
+        return this.statuses.CLOSE_TO_PLAYER;
     }
 
 }

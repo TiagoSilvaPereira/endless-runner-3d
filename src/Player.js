@@ -9,6 +9,7 @@ class Player {
             'JUMPING': false,
             'DRAGGING': false,
             'FALLING_DOWN' : false,
+            'SLOW' : false,
             'DEAD': false
         };
 
@@ -17,6 +18,14 @@ class Player {
          */
         this.coinsTextControl = null;
         this.metersTextControl = null;
+
+        /**
+         * SOUNDS
+         */
+        this.dieSound = null;
+        this.jumpSound = null;
+        this.damageSound = null;
+        this.gotCoinSound = null;
 
         /**
          * Set it to true to make the player indestructible for tests
@@ -35,7 +44,8 @@ class Player {
         this.jumpMaxAltitude = 4.7;
         
         // Stores the last player altitude from every frame
-        this.lastAltitude = 0.25;
+        this.defaultAltitude = 0.25;
+        this.lastAltitude = this.defaultAltitude;
         
         this.coins = 0;
 
@@ -49,7 +59,18 @@ class Player {
          */
         this.travelledDistance = 0;
         this.totalTravelledDistance = 0;
+
+        this.setupPlayer();
+
+    }
+
+    setupPlayer() {
         
+        this.dieSound = new BABYLON.Sound('playerDieSound', '/assets/sounds/game-die.mp3', this.scene, null, {volume: 0.4});
+        this.gotCoinSound = new BABYLON.Sound('gotCoinSound', '/assets/sounds/coin-c-09.wav', this.scene);
+        this.damageSound = new BABYLON.Sound('damageSound', '/assets/sounds/damage.wav', this.scene);
+
+
         /**
          * Method to set an ellipsoid (for collision) based on boundingbox size 
          */ 
@@ -65,7 +86,7 @@ class Player {
             depth: 0.3333333
         }, this.scene);
 
-        this.mesh.position.y = 0.25;
+        this.mesh.position.y = this.defaultAltitude;
 
         let playerMaterial = new BABYLON.StandardMaterial("playerMaterial", this.scene);
         playerMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1);
@@ -74,10 +95,31 @@ class Player {
 
         this.mesh.setEllipsoidPerBoundingBox();
 
+        this.setupAnimations();
         this.createHUD();
 
         //GAME.drawEllipsoid(this.mesh);
 
+    }
+
+    setupAnimations() {
+        let blinkAnimation = new BABYLON.Animation("blinkAnimation", "material.alpha", 120, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+
+        let keys = []; 
+
+        //At the animation key 0, the value of alpha is "1"
+        keys.push({ frame: 0, value: 1 });
+
+        //At the animation key 15, the value of alpha is "0.2"
+        keys.push({ frame: 15, value: 0.2 });
+
+        //At the animation key 30, the value of alpha is "1"
+        keys.push({ frame: 30, value: 1 });
+
+        blinkAnimation.setKeys(keys);
+
+        this.mesh.animations = [];
+        this.mesh.animations.push(blinkAnimation);
     }
 
     createHUD() {
@@ -104,6 +146,29 @@ class Player {
         return this.mesh;
     }
 
+    damage() {
+        this.damageSound.play();
+        this.blink();
+        this.speed = this.defaultSpeed / 2.5;
+        
+        this.setStatus('SLOW', true);
+
+        setTimeout(() => {
+            this.setStatus('SLOW', false);
+            this.speed = this.defaultSpeed;
+        }, 1500);
+
+    }
+
+    blink() {
+        let blinkAnimation = this.scene.beginAnimation(this.mesh, 0, 30, true);
+
+        setTimeout(() => {
+            blinkAnimation.pause();
+            this.mesh.material.alpha = 1;
+        }, 1500);
+    }
+
     move() {
 
         let animationRatio = (this.scene.getAnimationRatio() / 50),
@@ -113,7 +178,7 @@ class Player {
 
         // If is jumping, multiply the speed by 1.5
         runSpeed *= (this.statuses.JUMPING) ? 1.5 : 1;
-
+        
         this.mesh.moveWithCollisions(new BABYLON.Vector3(
             0, 
             gravity + jump, 
@@ -195,13 +260,16 @@ class Player {
         } else {
             
             if(!this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
-                this.mesh.position.y = 0.25;
+                this.mesh.position.y = this.defaultAltitude;
             }
 
             this.setStatus('DRAGGING', false);
             this.mesh.scaling.y = 1;
             this.mesh.setEllipsoidPerBoundingBox();
-            this.speed = this.defaultSpeed;
+            
+            if(!this.statuses.SLOW) {
+                this.speed = this.defaultSpeed;
+            }
             
         }
         
@@ -214,6 +282,7 @@ class Player {
     keepCoin() {
         this.coins++;
         this.coinsTextControl.text = 'Coins: ' + this.coins;
+        this.gotCoinSound.play();
     }
 
     reset() {
@@ -224,7 +293,7 @@ class Player {
         this.setStatus('DRAGGING', false);
         
         this.mesh.position.x = 0;
-        this.mesh.position.y = 0.25;
+        this.mesh.position.y = this.defaultAltitude;
         this.mesh.position.z = 0;
         this.travelledDistance = 0;
         this.totalTravelledDistance = 0;
@@ -232,6 +301,9 @@ class Player {
     }
 
     die() {
+        
+        this.dieSound.play();
+
         if(this.onDie && !this.godMode) {
             this.onDie();
         }
