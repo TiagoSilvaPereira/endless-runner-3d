@@ -98,7 +98,7 @@ class Pursuer {
         let animationRatio = this.scene.getAnimationRatio();
 
         this.mesh.position.x = this.player.mesh.position.x;
-        this.mesh.position.y = 0.2 + (this.player.mesh.position.y - this.player.defaultAltitude);
+        this.mesh.position.y = (Math.sin(this.mesh.position.z) / 100) + 0.2 + (this.player.mesh.position.y - this.player.defaultAltitude);
         this.mesh.position.z = this.player.mesh.position.z - this.distanceBeetweenPlayer;
 
         if((this.player.totalTravelledDistance - this.currentPlayerTravelledDistance) > 100 && this.statuses.CLOSE_TO_PLAYER) {

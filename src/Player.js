@@ -48,6 +48,11 @@ class Player {
         this.lastAltitude = this.defaultAltitude;
         
         this.coins = 0;
+        this.points = 0;
+        this.pointsRecord = false;
+
+        // How many times the user was damaged at time
+        this.damages = 0;
 
         this.onDie = null;
 
@@ -89,7 +94,7 @@ class Player {
         this.mesh.position.y = this.defaultAltitude;
 
         let playerMaterial = new BABYLON.StandardMaterial("playerMaterial", this.scene);
-        playerMaterial.diffuseColor = new BABYLON.Color3(0.71, 0.08, 0.25);
+        playerMaterial.diffuseColor = new BABYLON.Color3.FromHexString('#e74c3c');
 
         this.mesh.material = playerMaterial;
 
@@ -147,9 +152,12 @@ class Player {
     }
 
     damage() {
+
+        this.damages++;
+        
         this.damageSound.play();
         this.blink();
-        this.speed = this.defaultSpeed / 2.5;
+        this.speed = this.defaultSpeed / 2;
         
         this.setStatus('SLOW', true);
 
@@ -196,7 +204,6 @@ class Player {
         
 
         if(this.mesh.position.y <= -2 && !this.statuses.DEAD) {
-            this.setStatus('DEAD', true);
             this.die();
         }
 
@@ -294,6 +301,8 @@ class Player {
         this.setStatus('FALLING_DOWN', false);
         this.setStatus('DRAGGING', false);
         
+        this.coins = 0;
+        this.damages = 0;
         this.mesh.position.x = 0;
         this.mesh.position.y = this.defaultAltitude;
         this.mesh.position.z = 0;
@@ -303,12 +312,56 @@ class Player {
     }
 
     die() {
-        
+
+        this.setStatus('DEAD', true);
         this.dieSound.play();
 
         if(this.onDie && !this.godMode) {
             this.onDie();
         }
+
     }
+
+    getPoints() {
+        return this.points;
+    }
+
+    calculatePoints() {
+        this.points = 0;
+
+        this.points += (this.coins * 10);
+        this.points += this.totalTravelledDistance;
+        this.points -= (this.damages * 5);
+
+        this.points = (this.points > 0) ? this.points.toFixed(0) : 0;
+
+        this.checkAndSaveRecord(this.points);
+
+        return this.points;
+    }
+
+    checkAndSaveRecord(points) {
+        let lastRecord = 0;
+
+        this.pointsRecord = false;
+
+        if(window.localStorage['last_record']) {
+            lastRecord = parseInt(window.localStorage['last_record'], 10);
+        }
+
+        if(lastRecord < points) {
+            this.pointsRecord =  true;
+            window.localStorage['last_record'] = points;
+        }
+    }
+
+    hasMadePointsRecord() {
+        return this.pointsRecord;
+    }
+
+    getLastRecord() {
+        return window.localStorage['last_record'] || 0;
+    }
+
 
 }

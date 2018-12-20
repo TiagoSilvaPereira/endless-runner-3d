@@ -15,6 +15,12 @@ class RunnerLevel extends Level {
         this.generatedTilesNumber = 0;
         this.generatedTilesBlocksNumber = 0;
 
+        // Menu
+        this.menu = null;
+        this.pointsTextControl = null;
+        this.lastRecordTextControl = null;
+        this.hasMadeRecordTextControl = null;
+
     }
 
     buildScene() {
@@ -40,6 +46,7 @@ class RunnerLevel extends Level {
         // Add lights to the scene
         var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 10, 0), this.scene);
         var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 100, -100), this.scene);
+        light1.intensity = 0.9;
         light2.intensity = 0.2;
 
         this.createPlayer();
@@ -52,8 +59,8 @@ class RunnerLevel extends Level {
     createCommonMaterials() {
         
         let coinMaterial = new BABYLON.StandardMaterial('coinMaterial', this.scene);
-        coinMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0);
-        coinMaterial.emissiveColor = new BABYLON.Color3(0.4, 0.4, 0);
+        coinMaterial.diffuseColor = new BABYLON.Color3.FromHexString('#f1c40f');
+        coinMaterial.emissiveColor = new BABYLON.Color3.FromHexString('#f1c40f');
 
         let tileMaterialLight = new BABYLON.StandardMaterial("tileMaterialLight", this.scene);
         tileMaterialLight.diffuseColor = new BABYLON.Color3(0.95, 0.65, 0.51);
@@ -80,9 +87,24 @@ class RunnerLevel extends Level {
     createMenu() {
         this.menu = new UI('runnerMenuUI');
         
-        /*this.menu.addButton('returnButton', 'Return to Game', {
-            'onclick': () => {}
-        });*/
+        this.pointsTextControl = this.menu.addText('Points: 0', {
+            'top': '-150px',
+            'color': '#f39c12',
+            'fontSize': '40px',
+            'verticalAlignment': BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER
+        });
+
+        this.lastRecordTextControl = this.menu.addText('Current Record: 0', {
+            'top': '-100px',
+            'verticalAlignment': BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER
+        });
+
+        this.hasMadeRecordTextControl = this.menu.addText('You got a new Points Record!', {
+            'top': '-60px',
+            'color': '#f39c12',
+            'fontSize': '40px',
+            'verticalAlignment': BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER
+        });
 
         this.menu.addButton('replayButton', 'Replay Game', {
             'onclick': () => this.replay() 
@@ -118,7 +140,20 @@ class RunnerLevel extends Level {
         // Actions when player dies
         this.player.onDie = () => {
             GAME.pause();
-            this.menu.show();
+            this.player.calculatePoints();
+            this.showMenu();
+        }
+    }
+
+    showMenu() {
+        this.pointsTextControl.text = 'Points: ' + this.player.getPoints();
+        this.lastRecordTextControl.text = 'Current Record: ' + this.player.getLastRecord();
+        this.menu.show();
+
+        if(this.player.hasMadePointsRecord()) {
+            this.hasMadeRecordTextControl.isVisible = true;
+        } else {
+            this.hasMadeRecordTextControl.isVisible = false;
         }
     }
 
