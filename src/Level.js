@@ -1,7 +1,5 @@
 class Level {
 
-    
-
     constructor() {
         
         /**

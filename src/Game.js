@@ -59,29 +59,28 @@ class Game {
         this.keys.right = false;
 
         function keyDown(e) {
-            if (e.keyCode == 87) {//Arrow Up
+            if (e.keyCode == 87 || e.keyCode == 38) {//Arrow Up
                 this.keys.up = 1;
                 
-            }else if (e.keyCode == 83) {//Arrow Down
+            }else if (e.keyCode == 83 || e.keyCode == 40) {//Arrow Down
                 this.keys.down = 1;
                 
-            } else if (e.keyCode == 65) {//Arrow Left
+            } else if (e.keyCode == 65 || e.keyCode == 37) {//Arrow Left
                 this.keys.left = 1;
                 
-            } else if (e.keyCode == 68) {//Arrow Right
+            } else if (e.keyCode == 68 || e.keyCode == 39) {//Arrow Right
                 this.keys.right = 1;
             }
         }
 
         function keyUp(e) {
-            if (e.keyCode == 87) {//Arrow Up
+            if (e.keyCode == 87 || e.keyCode == 38) {//Arrow Up
                 this.keys.up = 0;
-            }else if (e.keyCode == 83) {//Arrow Down
+            }else if (e.keyCode == 83 || e.keyCode == 40) {//Arrow Down
                 this.keys.down = 0;
-            } else if (e.keyCode == 65) {//Arrow Left
+            } else if (e.keyCode == 65 || e.keyCode == 37) {//Arrow Left
                 this.keys.left = 0;
-                
-            } else if (e.keyCode == 68) {//Arrow Right
+            } else if (e.keyCode == 68 || e.keyCode == 39) {//Arrow Right
                 this.keys.right = 0;
             }
         }

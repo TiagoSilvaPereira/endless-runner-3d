@@ -19,6 +19,7 @@ class RunnerLevel extends Level {
 
     buildScene() {
         
+        this.scene.clearColor = new BABYLON.Color3(0.39, 0.80, 0.85);
         this.scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
 
         var music = new BABYLON.Sound('music', '/assets/musics/Guitar-Mayhem.mp3', this.scene, null, { loop: true, autoplay: true, volume: 0.7 });
@@ -34,19 +35,12 @@ class RunnerLevel extends Level {
 
         // This attaches the camera to the canvas
         this.scene.activeCamera = camera;
-        camera.attachControl(GAME.canvas, true);
+        //camera.attachControl(GAME.canvas, true);
 
         // Add lights to the scene
         var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 10, 0), this.scene);
         var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 100, -100), this.scene);
-        light2.intensity = 0.4;
-
-        var skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", this.scene);
-        skyboxMaterial.backFaceCulling = false;
-        skyboxMaterial.inclination = -0.3;
-        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, this.scene);
-        skybox.material = skyboxMaterial;
-        skybox.infiniteDistance = true;
+        light2.intensity = 0.2;
 
         this.createPlayer();
         this.createPursuer();
@@ -56,24 +50,31 @@ class RunnerLevel extends Level {
     }
 
     createCommonMaterials() {
+        
         let coinMaterial = new BABYLON.StandardMaterial('coinMaterial', this.scene);
         coinMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0);
         coinMaterial.emissiveColor = new BABYLON.Color3(0.4, 0.4, 0);
 
-        let tileMaterialWhite = new BABYLON.StandardMaterial("tileMaterialWhite", this.scene);
-        tileMaterialWhite.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+        let tileMaterialLight = new BABYLON.StandardMaterial("tileMaterialLight", this.scene);
+        tileMaterialLight.diffuseColor = new BABYLON.Color3(0.95, 0.65, 0.51);
         
-        let tileMaterialRed = new BABYLON.StandardMaterial("tileMaterialRed", this.scene);
-        tileMaterialRed.diffuseColor = new BABYLON.Color3(0.8, 0.3, 0.3);
+        let tileMaterialDark = new BABYLON.StandardMaterial("tileMaterialDark", this.scene);
+        tileMaterialDark.diffuseColor = new BABYLON.Color3(0.95, 0.56, 0.40);
+
+        let hazardMaterial = new BABYLON.StandardMaterial("hazardMaterial", this.scene);
+        hazardMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.5, 0.1);
+        hazardMaterial.alpha = 0.6;
         
         // Freeze materials to improve performance (this material will not be modified)
         coinMaterial.freeze();
-        tileMaterialWhite.freeze();
-        tileMaterialRed.freeze();
+        tileMaterialLight.freeze();
+        tileMaterialDark.freeze();
+        hazardMaterial.freeze();
 
         this.addMaterial(coinMaterial);
-        this.addMaterial(tileMaterialWhite);
-        this.addMaterial(tileMaterialRed);
+        this.addMaterial(tileMaterialLight);
+        this.addMaterial(tileMaterialDark);
+        this.addMaterial(hazardMaterial);
     }
 
     createMenu() {
@@ -94,7 +95,7 @@ class RunnerLevel extends Level {
         let camera = new BABYLON.ArcRotateCamera("arcCamera", 0, 0, 0, BABYLON.Vector3.Zero(), this.scene);
     
         camera.ctype = 1;
-        camera.setPosition(new BABYLON.Vector3(0, 1, -2));
+        camera.setPosition(new BABYLON.Vector3(0, 1, -3));
         camera.radius = 2;
 
         return camera;
@@ -103,8 +104,16 @@ class RunnerLevel extends Level {
     createPlayer() {
         // Creates the player and set it as camera target
         this.player = new Player(this.scene);
-        this.scene.activeCamera.target = this.player.getMesh();
         this.scene.activeCamera.lockedTarget = this.player.getMesh();
+
+        var playerLight = new BABYLON.DirectionalLight("playerLight", new BABYLON.Vector3(1,-2, 1), this.scene);
+        playerLight.intensity = 0.3;
+        playerLight.parent = this.player.mesh;
+
+        this.scene.shadowGenerator = new BABYLON.ShadowGenerator(32, playerLight);
+        this.scene.shadowGenerator.useBlurExponentialShadowMap = true;
+
+        this.scene.shadowGenerator.getShadowMap().renderList.push(this.player.mesh);
 
         // Actions when player dies
         this.player.onDie = () => {
@@ -115,6 +124,7 @@ class RunnerLevel extends Level {
 
     createPursuer() {
         this.pursuer = new Pursuer(this);
+        this.scene.shadowGenerator.getShadowMap().renderList.push(this.pursuer.mesh);
     }
 
     generateGroundTiles() {
@@ -236,13 +246,16 @@ class RunnerLevel extends Level {
 
         let tile = BABYLON.MeshBuilder.CreateBox("groundTile" + this.generatedTilesNumber, options, this.scene);
         BABYLON.Tags.AddTagsTo(tile, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
+        
+        tile.receiveShadows = true;
             
         tile.position.z = ((this.generatedTilesNumber - 1) * this.tileDepth);
         tile.position.y = -0.5;
 
         tile.checkCollisions = true;
 
-        tile.material = ((this.generatedTilesNumber % 2) == 0) ? this.getMaterial('tileMaterialWhite') : this.getMaterial('tileMaterialRed');
+        tile.material = ((this.generatedTilesNumber % 2) == 0) ? this.getMaterial('tileMaterialLight') : this.getMaterial('tileMaterialDark');
+
 
         return tile;
 
@@ -338,11 +351,12 @@ class RunnerLevel extends Level {
     createTileWithObstacleTile() {
 
         let tile = this.createTile();
-        let obstacle = BABYLON.MeshBuilder.CreateBox("obstacleTile" + this.generatedTilesNumber, {width: 1, height: 0.2, depth: 9}, this.scene);
+        let obstacle = BABYLON.MeshBuilder.CreateBox("obstacleTile" + this.generatedTilesNumber, {width: 0.9, height: 0.05, depth: 8.75}, this.scene);
         BABYLON.Tags.AddTagsTo(obstacle, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
         
         obstacle.position.z = tile.position.z;
-        obstacle.position.y = 0.1;
+        obstacle.position.y = 0.0025;
+        obstacle.material = this.getMaterial('hazardMaterial');
 
         // Player dies when intersects this obstacle
         let playerMesh = this.player.getMesh();

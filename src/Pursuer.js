@@ -26,8 +26,14 @@ class Pursuer {
 
         this.mesh = BABYLON.MeshBuilder.CreateSphere("pursuerSphere", {diameter: 0.25, segments: 2}, this.scene);
         this.mesh.position.x = 0;
-        this.mesh.position.y = 0.125;
+        this.mesh.position.y = 0.2;
         this.mesh.position.z = this.player.mesh.position.z - this.distanceBeetweenPlayer;
+
+        this.pursuerMaterial = new BABYLON.StandardMaterial('pursuerMaterial', this.scene);
+        this.pursuerMaterial.diffuseColor = new BABYLON.Color3(0.47, 0.55, 0.64);
+        this.pursuerMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+
+        this.mesh.material = this.pursuerMaterial;
 
         this.approachSound = new BABYLON.Sound('approachSound', '/assets/sounds/monster.wav', this.scene, null);
         this.attackSound = new BABYLON.Sound('attackSound', '/assets/sounds/monster_attack.mp3', this.scene);
@@ -92,10 +98,8 @@ class Pursuer {
         let animationRatio = this.scene.getAnimationRatio();
 
         this.mesh.position.x = this.player.mesh.position.x;
-        this.mesh.position.y = 0.125 + (this.player.mesh.position.y - this.player.defaultAltitude);
+        this.mesh.position.y = 0.2 + (this.player.mesh.position.y - this.player.defaultAltitude);
         this.mesh.position.z = this.player.mesh.position.z - this.distanceBeetweenPlayer;
-
-        this.mesh.rotation.x += 0.1 * animationRatio;
 
         if((this.player.totalTravelledDistance - this.currentPlayerTravelledDistance) > 100 && this.statuses.CLOSE_TO_PLAYER) {
             this.moveAwayFromPlayer();

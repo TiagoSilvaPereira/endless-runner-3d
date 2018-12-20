@@ -89,7 +89,7 @@ class Player {
         this.mesh.position.y = this.defaultAltitude;
 
         let playerMaterial = new BABYLON.StandardMaterial("playerMaterial", this.scene);
-        playerMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1);
+        playerMaterial.diffuseColor = new BABYLON.Color3(0.71, 0.08, 0.25);
 
         this.mesh.material = playerMaterial;
 
@@ -170,6 +170,8 @@ class Player {
     }
 
     move() {
+
+        if(this.statuses.DEAD) return;
 
         let animationRatio = (this.scene.getAnimationRatio() / 50),
             gravity = (this.godMode) ? 0 : (this.gravity  * animationRatio),
