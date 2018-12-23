@@ -229,9 +229,17 @@ class Player {
 
     checkPlayerAltitude() {
 
+        GAME.log.push({
+            'doing': 'checking altitude',
+            'jumping': this.statuses.JUMPING,
+            'falling': this.statuses.FALLING_DOWN,
+            'altitude': this.mesh.position.y,
+            'lastAltitude': this.lastAltitude,
+        });
+
         if(Math.abs(this.mesh.position.y - this.lastAltitude) > 2) {
             console.log('Ops', this.statuses.JUMPING, this.statuses.FALLING_DOWN);
-            GAME.log.logLast(4);
+            GAME.log.logLast(20);
         }
 
         if(this.mesh.position.y < this.lastAltitude) {
@@ -241,6 +249,14 @@ class Player {
         }
 
         this.lastAltitude = this.mesh.position.y;
+
+        GAME.log.push({
+            'doing': 'checked altitude',
+            'jumping': this.statuses.JUMPING,
+            'falling': this.statuses.FALLING_DOWN,
+            'altitude': this.mesh.position.y,
+            'lastAltitude': this.lastAltitude,
+        });
     }
 
     checkPlayerLateralMovement(animationRatio) {
@@ -255,19 +271,28 @@ class Player {
 
     checkPlayerJump() {
         if(GAME.keys.up && !this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
-            console.log('Start jumping', this.mesh.position.y, this.lastAltitude)
+            GAME.log.push({
+                'doing': 'start jumping',
+                'jumping': this.statuses.JUMPING,
+                'falling': this.statuses.FALLING_DOWN,
+            });
             this.setStatus('JUMPING', true);
         }
 
         /**
          * If the player reaches the jump max altitude, then we change JUMPING status to false
-         * and "hack" the lastAltitude adding more 1 unit (it is necessary because the method checkPlayerAltitude will
+         * and "hack" the lastAltitude adding more 100 units (it is necessary because the method checkPlayerAltitude will
          * detect FALLING_DOWN only on the next animation frame if we dont make it, 
          * and it will crash the method checkPlayerDragging, immediataly setting the player position 
-         * to the initial position)
+         * to the initial position. Then we addd a big number to lastAltitude to prevent it)
          */
         if(this.mesh.position.y >= this.jumpMaxAltitude && this.statuses.JUMPING) {
-            this.lastAltitude = this.lastAltitude + 1; // Hacking lastAltitude (explained above)
+            GAME.log.push({
+                'doing': 'start falling down',
+                'jumping': this.statuses.JUMPING,
+                'falling': this.statuses.FALLING_DOWN
+            });
+            this.lastAltitude = this.lastAltitude + 100; // Hacking lastAltitude (explained above)
             this.setStatus('FALLING_DOWN', true);
             this.setStatus('JUMPING', false);
         }
@@ -299,7 +324,11 @@ class Player {
             if(!this.statuses.DRAGGING) {
                 // Provavelmente o problema do pulo é aqui
                 if(!this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
-                    console.log('reset position', this.statuses.JUMPING, this.statuses.FALLING_DOWN)
+                    GAME.log.push({
+                        'doing': 'reseting position',
+                        'jumping': this.statuses.JUMPING,
+                        'falling': this.statuses.FALLING_DOWN
+                    });
                     this.mesh.position.y = this.defaultAltitude;
                 }
     

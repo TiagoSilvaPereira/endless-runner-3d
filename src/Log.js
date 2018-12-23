@@ -1,13 +1,26 @@
 class Log {
 
-    constructor() {
+    constructor(enabled = true) {
         this.currentID = 0;
         this.logs = [];
+        this.enabled = enabled;
     }
 
     push(log = {}) {
+        if(!this.enabled) return;
+
         log.ID = ++this.currentID;
         this.logs.push(log);
+    }
+
+    /**
+     * Simple log method to show what something is doing at moment
+     * @param {*} what 
+     */
+    doing(what = '') {
+        this.push({
+            'doing': what
+        });
     }
 
     getLast(quantity = 1) {
