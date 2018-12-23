@@ -40,6 +40,7 @@ class UI {
         textControl.top = options.top || '0px';
         textControl.textHorizontalAlignment = (typeof options.horizontalAlignment !== 'undefined') ? options.horizontalAlignment : BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
         textControl.textVerticalAlignment = (typeof options.verticalAlignment !== 'undefined') ? options.verticalAlignment : BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        textControl.textWrapping = options.wrapping || true;
         
         this.menuTexture.addControl(textControl);
         this.controls.push(textControl);

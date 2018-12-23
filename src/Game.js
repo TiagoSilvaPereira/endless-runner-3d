@@ -13,6 +13,11 @@ class Game {
         this.paused = false;
 
         /**
+         * Can be used to log objects and debug the game
+         */
+        this.log = new Log();
+
+        /**
          * Starts the BABYLON engine on the Canvas element
          */
         this.canvas = document.getElementById("renderCanvas");
@@ -24,6 +29,7 @@ class Game {
 
         this.levels = {
             'HomeMenuLevel': new HomeMenuLevel(),
+            'CreditsLevel': new CreditsLevel(),
             'RunnerLevel': new RunnerLevel()
         };
 

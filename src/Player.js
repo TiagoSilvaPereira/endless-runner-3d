@@ -178,7 +178,7 @@ class Player {
     }
 
     move() {
-        console.log(this.statuses.JUMPING, this.statuses.FALLING_DOWN)
+        
         if(this.statuses.DEAD) return;
 
         let animationRatio = (this.scene.getAnimationRatio() / 50),
@@ -207,6 +207,13 @@ class Player {
             this.die();
         }
 
+        GAME.log.push({
+            'altitude': this.mesh.position.y,
+            'lastAltitude': this.lastAltitude,
+            'jumping': this.statuses.JUMPING,
+            'falling': this.statuses.FALLING_DOWN
+        });
+
     }
 
     calculateTravelledDistance(animationRatio) {
@@ -221,6 +228,12 @@ class Player {
     }
 
     checkPlayerAltitude() {
+
+        if(Math.abs(this.mesh.position.y - this.lastAltitude) > 2) {
+            console.log('Ops', this.statuses.JUMPING, this.statuses.FALLING_DOWN);
+            GAME.log.logLast(4);
+        }
+
         if(this.mesh.position.y < this.lastAltitude) {
             this.setStatus('FALLING_DOWN', true);
         } else {
@@ -242,6 +255,7 @@ class Player {
 
     checkPlayerJump() {
         if(GAME.keys.up && !this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
+            console.log('Start jumping', this.mesh.position.y, this.lastAltitude)
             this.setStatus('JUMPING', true);
         }
 
@@ -261,6 +275,12 @@ class Player {
 
     checkPlayerDragging() {
 
+        // if(this.statuses.JUMPING || this.statuses.FALLING_DOWN) {
+        //     return;
+        // } else {
+        //     console.log('Can drag - jumping: ' + this.statuses.JUMPING + ' falling: ' + this.statuses.FALLING_DOWN)
+        // }
+
         if(GAME.keys.down) {
             
             if(!this.statuses.DRAGGING) {
@@ -279,6 +299,7 @@ class Player {
             if(!this.statuses.DRAGGING) {
                 // Provavelmente o problema do pulo é aqui
                 if(!this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
+                    console.log('reset position', this.statuses.JUMPING, this.statuses.FALLING_DOWN)
                     this.mesh.position.y = this.defaultAltitude;
                 }
     

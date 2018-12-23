@@ -12,6 +12,11 @@ class HomeMenuLevel extends Level {
         menu.addButton('playButton', 'Play Game', {
             'onclick': () => GAME.goToLevel('RunnerLevel')
         });
+        
+        menu.addButton('creditsButton', 'Credits', {
+            'top': '70px',
+            'onclick': () => GAME.goToLevel('CreditsLevel')
+        });
 
     }
 
