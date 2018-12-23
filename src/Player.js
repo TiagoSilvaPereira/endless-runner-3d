@@ -178,7 +178,7 @@ class Player {
     }
 
     move() {
-
+        console.log(this.statuses.JUMPING, this.statuses.FALLING_DOWN)
         if(this.statuses.DEAD) return;
 
         let animationRatio = (this.scene.getAnimationRatio() / 50),
@@ -254,32 +254,42 @@ class Player {
          */
         if(this.mesh.position.y >= this.jumpMaxAltitude && this.statuses.JUMPING) {
             this.lastAltitude = this.lastAltitude + 1; // Hacking lastAltitude (explained above)
+            this.setStatus('FALLING_DOWN', true);
             this.setStatus('JUMPING', false);
         }
     }
 
     checkPlayerDragging() {
+
         if(GAME.keys.down) {
             
-            this.setStatus('DRAGGING', true);
-            this.mesh.scaling.y = 0.5;
-            this.mesh.setEllipsoidPerBoundingBox();
-            this.speed = this.defaultSpeed * 1.5;
+            if(!this.statuses.DRAGGING) {
+                this.setStatus('DRAGGING', true);
+                this.mesh.scaling.y = 0.5;
+                this.mesh.setEllipsoidPerBoundingBox();
+                this.speed = this.defaultSpeed * 1.5;
+
+                setTimeout(() => {
+                    this.setStatus('DRAGGING', false);
+                }, 700);
+            }
             
         } else {
-            
-            if(!this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
-                this.mesh.position.y = this.defaultAltitude;
+
+            if(!this.statuses.DRAGGING) {
+                // Provavelmente o problema do pulo é aqui
+                if(!this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
+                    this.mesh.position.y = this.defaultAltitude;
+                }
+    
+                this.mesh.scaling.y = 1;
+                this.mesh.setEllipsoidPerBoundingBox();
+                
+                if(!this.statuses.SLOW) {
+                    this.speed = this.defaultSpeed;
+                }
             }
 
-            this.setStatus('DRAGGING', false);
-            this.mesh.scaling.y = 1;
-            this.mesh.setEllipsoidPerBoundingBox();
-            
-            if(!this.statuses.SLOW) {
-                this.speed = this.defaultSpeed;
-            }
-            
         }
         
     }
@@ -313,10 +323,12 @@ class Player {
 
     die() {
 
+        if(this.godMode) return;
+
         this.setStatus('DEAD', true);
         this.dieSound.play();
 
-        if(this.onDie && !this.godMode) {
+        if(this.onDie) {
             this.onDie();
         }
 

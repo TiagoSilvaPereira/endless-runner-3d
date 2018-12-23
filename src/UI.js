@@ -13,6 +13,10 @@ class UI {
         button.height = options.height || '60px';
         button.color = options.color || 'black';
         button.background = options.background || 'white';
+        button.left = options.left || '0px';
+        button.top = options.top || '0px';
+        button.textHorizontalAlignment = (typeof options.horizontalAlignment !== 'undefined') ? options.horizontalAlignment : BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+        button.textVerticalAlignment = (typeof options.verticalAlignment !== 'undefined') ? options.verticalAlignment : BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
 
         if(options.onclick) {
             button.onPointerUpObservable.add(options.onclick);

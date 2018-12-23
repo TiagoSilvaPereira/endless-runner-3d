@@ -12,14 +12,22 @@ class Level {
     }
 
     start() {
+        GAME.resume();
+        
+        if(this.setProperties) {
+            this.setProperties();
+        }
+
         this.createScene();
     }
 
     createScene() {
         // Create the scene space
         this.scene = new BABYLON.Scene(GAME.engine);
-
-        this.buildScene();
+        
+        if(this.buildScene) {
+            this.buildScene();
+        }
 
         // If has the beforeRender method
         if(this.beforeRender) {
@@ -33,6 +41,7 @@ class Level {
 
     exit() {
         this.scene.dispose();
+        this.scene = null;
     }
 
     /**

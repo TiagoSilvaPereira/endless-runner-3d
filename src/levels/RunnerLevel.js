@@ -1,8 +1,6 @@
 class RunnerLevel extends Level {
 
-    constructor() {
-        
-        super();
+    setProperties() {
 
         this.player = null;
         this.pursuer = null;
@@ -20,7 +18,7 @@ class RunnerLevel extends Level {
         this.pointsTextControl = null;
         this.lastRecordTextControl = null;
         this.hasMadeRecordTextControl = null;
-
+        
     }
 
     buildScene() {
@@ -35,13 +33,13 @@ class RunnerLevel extends Level {
 
         this.createCommonMaterials();
 
-        this.createMenu();
+        this.createMenus();
 
         var camera = this.createArcCamera();
 
         // This attaches the camera to the canvas
         this.scene.activeCamera = camera;
-        //camera.attachControl(GAME.canvas, true);
+        camera.attachControl(GAME.canvas, true);
 
         // Add lights to the scene
         var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 10, 0), this.scene);
@@ -84,7 +82,7 @@ class RunnerLevel extends Level {
         this.addMaterial(hazardMaterial);
     }
 
-    createMenu() {
+    createMenus() {
         this.menu = new UI('runnerMenuUI');
         
         this.pointsTextControl = this.menu.addText('Points: 0', {
@@ -102,12 +100,17 @@ class RunnerLevel extends Level {
         this.hasMadeRecordTextControl = this.menu.addText('You got a new Points Record!', {
             'top': '-60px',
             'color': '#f39c12',
-            'fontSize': '40px',
+            'fontSize': '20px',
             'verticalAlignment': BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER
         });
 
         this.menu.addButton('replayButton', 'Replay Game', {
             'onclick': () => this.replay() 
+        });
+
+        this.menu.addButton('backButton', 'Return to Home', {
+            'top': '70px',
+            'onclick': () => GAME.goToLevel('HomeMenuLevel')
         });
 
         this.menu.hide();
@@ -386,7 +389,7 @@ class RunnerLevel extends Level {
     createTileWithObstacleTile() {
 
         let tile = this.createTile();
-        let obstacle = BABYLON.MeshBuilder.CreateBox("obstacleTile" + this.generatedTilesNumber, {width: 0.9, height: 0.05, depth: 8.75}, this.scene);
+        let obstacle = BABYLON.MeshBuilder.CreateBox("obstacleTile" + this.generatedTilesNumber, {width: 0.9, height: 0.05, depth: 8.25}, this.scene);
         BABYLON.Tags.AddTagsTo(obstacle, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
         
         obstacle.position.z = tile.position.z;
