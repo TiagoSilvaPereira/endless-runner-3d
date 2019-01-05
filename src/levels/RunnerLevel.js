@@ -3,7 +3,7 @@ class RunnerLevel extends Level {
     setProperties() {
 
         this.player = null;
-        this.pursuer = null;
+        this.monster = null;
 
         // Tiles generation control properties
         this.tileDepth = 10;
@@ -28,9 +28,6 @@ class RunnerLevel extends Level {
 
         var music = new BABYLON.Sound('music', '/assets/musics/Guitar-Mayhem.mp3', this.scene, null, { loop: true, autoplay: true, volume: 0.5 });
 
-        // Adding an action manager to this scene
-        this.scene.actionManager = new BABYLON.ActionManager(this.scene);
-
         this.createCommonMaterials();
 
         this.createMenus();
@@ -48,7 +45,7 @@ class RunnerLevel extends Level {
         light2.intensity = 0.2;
 
         this.createPlayer();
-        this.createPursuer();
+        this.createMonster();
 
         this.generateGroundTiles();
 
@@ -162,9 +159,9 @@ class RunnerLevel extends Level {
         }
     }
 
-    createPursuer() {
-        this.pursuer = new Pursuer(this);
-        this.scene.shadowGenerator.getShadowMap().renderList.push(this.pursuer.mesh);
+    createMonster() {
+        this.monster = new Monster(this);
+        this.scene.shadowGenerator.getShadowMap().renderList.push(this.monster.mesh);
     }
 
     generateGroundTiles() {
@@ -252,9 +249,9 @@ class RunnerLevel extends Level {
 
         tyleType = 'NORMAL_GROUND';
 
-        // If the player is starting to play (first 200 'meters'), creates normal ground tiles
+        // If the player is starting to play (first 200 'meters'), creates normal ground tiles,
+        // else, choose a tyle type randomly
         if(this.generatedTilesNumber > 20) {
-            // Choose a tyle type randomly
             let randomTileTypeNumber = Math.floor((Math.random() * tileTypes.length));
             tyleType = tileTypes[randomTileTypeNumber];
         }
@@ -335,36 +332,15 @@ class RunnerLevel extends Level {
             coin.position.z = (tile.position.z - (this.tileDepth / 2)) + (coinsNumber * 2);
             coin.position.y = 0.3;
 
-            let playerMesh = this.player.getMesh();
-            coin.actionManager = new BABYLON.ActionManager(this.scene);
-            
             /**
              * If the player collides with the Coin, we'll keep the coin and then interpolate
              * the coin altitude to up
              */
-            coin.actionManager.registerAction(
-                new BABYLON.ExecuteCodeAction(
-                    {
-                        trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
-                        parameter: playerMesh
-                    },
-                    () => { 
-
-                        let interpolateCoinAltitudeAction = new BABYLON.InterpolateValueAction(
-                            BABYLON.ActionManager.NothingTrigger,
-                            coin.position,
-                            'y',
-                            10,
-                            500 // 500 ms
-                        );
-
-                        this.scene.actionManager.registerAction(interpolateCoinAltitudeAction);
-                        interpolateCoinAltitudeAction.execute();
-
-                        this.player.keepCoin();
-                    }
-                )
-            );
+            let playerMesh = this.player.getMesh();
+            coin.executeOnIntersection(playerMesh, () => {
+                this.interpolate(coin.position, 'y', 10, 500);
+                this.player.keepCoin();
+            }, true);
 
         }
     }
@@ -403,25 +379,17 @@ class RunnerLevel extends Level {
 
         // Player dies when intersects this obstacle
         let playerMesh = this.player.getMesh();
-        obstacle.actionManager = new BABYLON.ActionManager(this.scene);
-        obstacle.actionManager.registerAction(
-            new BABYLON.ExecuteCodeAction(
-                {
-                    trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
-                    parameter: playerMesh
-                },
-                () => {
-
-                    this.player.damage();
+        obstacle.executeOnIntersection(playerMesh, () => {
+            
+            this.player.damage();
                     
-                    if(this.pursuer.isCloseToPlayer()) {
-                        this.pursuer.attackPlayer();
-                    } else {
-                        this.pursuer.approachToPlayer();
-                    }
-                }
-            )
-        );
+            if(this.monster.isCloseToPlayer()) {
+                this.monster.attackPlayer();
+            } else {
+                this.monster.approachToPlayer();
+            }
+
+        }, true);
 
     }
 
@@ -439,23 +407,14 @@ class RunnerLevel extends Level {
 
         // Player dies when intersects this obstacle
         let playerMesh = this.player.getMesh();
-        obstacle.actionManager = new BABYLON.ActionManager(this.scene);
-        obstacle.actionManager.registerAction(
-            new BABYLON.ExecuteCodeAction(
-                {
-                    trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
-                    parameter: playerMesh
-                },
-                () => { this.player.die() }
-            )
-        );
+        obstacle.executeOnIntersection(playerMesh, () => this.player.die(), true);
 
     }
 
     beforeRender() {
         if(!GAME.isPaused()) {
             this.player.move();
-            this.pursuer.move();
+            this.monster.move();
         }
     }
 
@@ -468,7 +427,7 @@ class RunnerLevel extends Level {
         this.disposeAllTiles();
 
         this.player.reset();
-        this.pursuer.approachToPlayer();
+        this.monster.approachToPlayer();
 
         this.lastTileType = 'HOLE';
         this.generatedTilesNumber = 0;

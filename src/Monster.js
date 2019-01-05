@@ -1,4 +1,4 @@
-class Pursuer {
+class Monster {
 
     constructor(level) {
 
@@ -24,16 +24,16 @@ class Pursuer {
          */
         this.scene = level.scene;
 
-        this.mesh = BABYLON.MeshBuilder.CreateSphere("pursuerSphere", {diameter: 0.25, segments: 2}, this.scene);
+        this.mesh = BABYLON.MeshBuilder.CreateSphere("monsterSphere", {diameter: 0.25, segments: 2}, this.scene);
         this.mesh.position.x = 0;
         this.mesh.position.y = 0.2;
         this.mesh.position.z = this.player.mesh.position.z - this.distanceBeetweenPlayer;
 
-        this.pursuerMaterial = new BABYLON.StandardMaterial('pursuerMaterial', this.scene);
-        this.pursuerMaterial.diffuseColor = new BABYLON.Color3(0.47, 0.55, 0.64);
-        this.pursuerMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        this.monsterMaterial = new BABYLON.StandardMaterial('monsterMaterial', this.scene);
+        this.monsterMaterial.diffuseColor = new BABYLON.Color3(0.47, 0.55, 0.64);
+        this.monsterMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
 
-        this.mesh.material = this.pursuerMaterial;
+        this.mesh.material = this.monsterMaterial;
 
         this.approachSound = new BABYLON.Sound('approachSound', '/assets/sounds/monster.wav', this.scene, null);
         this.attackSound = new BABYLON.Sound('attackSound', '/assets/sounds/monster_attack.mp3', this.scene);

@@ -130,4 +130,30 @@ class Level {
         }
     }
 
+    /**
+     * Interpolate a value inside the Level Scene using the BABYLON Action Manager
+     * @param {*} target The target object
+     * @param {*} property The property in the object to interpolate
+     * @param {*} toValue The final value of interpolation
+     * @param {*} duration The interpolation duration in milliseconds
+     */
+    interpolate(target, property, toValue, duration) {
+
+        if(!this.scene.actionManager) {
+            this.scene.actionManager = new BABYLON.ActionManager(this.scene);
+        }
+
+        let interpolateAction = new BABYLON.InterpolateValueAction(
+            BABYLON.ActionManager.NothingTrigger,
+            target,
+            property,
+            toValue,
+            duration
+        );
+
+        this.scene.actionManager.registerAction(interpolateAction);
+        interpolateAction.execute();
+        
+    }
+
 }

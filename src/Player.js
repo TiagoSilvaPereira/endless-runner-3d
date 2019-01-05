@@ -75,16 +75,6 @@ class Player {
         this.gotCoinSound = new BABYLON.Sound('gotCoinSound', '/assets/sounds/coin-c-09.wav', this.scene);
         this.damageSound = new BABYLON.Sound('damageSound', '/assets/sounds/damage.wav', this.scene);
 
-
-        /**
-         * Method to set an ellipsoid (for collision) based on boundingbox size 
-         */ 
-        BABYLON.Mesh.prototype.setEllipsoidPerBoundingBox = function(scene) {
-            var bi = this.getBoundingInfo();
-            var bb = bi.boundingBox;
-            this.ellipsoid = bb.maximumWorld.subtract(bb.minimumWorld).scale(0.5);
-        }
-
         this.mesh = BABYLON.MeshBuilder.CreateBox("player", {
             width: 0.3333333, 
             height: 0.5, 
@@ -263,12 +253,6 @@ class Player {
 
     checkPlayerDragging() {
 
-        // if(this.statuses.JUMPING || this.statuses.FALLING_DOWN) {
-        //     return;
-        // } else {
-        //     console.log('Can drag - jumping: ' + this.statuses.JUMPING + ' falling: ' + this.statuses.FALLING_DOWN)
-        // }
-
         if(GAME.keys.down) {
             
             if(!this.statuses.DRAGGING) {
@@ -285,7 +269,6 @@ class Player {
         } else {
 
             if(!this.statuses.DRAGGING) {
-                // Provavelmente o problema do pulo é aqui
                 if(!this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
                     this.mesh.position.y = this.defaultAltitude;
                 }
