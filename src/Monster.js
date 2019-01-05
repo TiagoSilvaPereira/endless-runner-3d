@@ -5,6 +5,7 @@ class Monster {
         /**
          * Who to chase
          */
+        this.level = level;
         this.player = level.player;
         this.currentPlayerTravelledDistance = 0;
         this.distanceBeetweenPlayer = 0.9;
@@ -44,63 +45,34 @@ class Monster {
         this.statuses.CLOSE_TO_PLAYER = true;
         this.currentPlayerTravelledDistance = this.player.totalTravelledDistance;
 
-        let interpolateDistanceAction = new BABYLON.InterpolateValueAction(
-            BABYLON.ActionManager.NothingTrigger,
-            this,
-            'distanceBeetweenPlayer',
-            0.9,
-            500
-        );
-
-        this.scene.actionManager.registerAction(interpolateDistanceAction);
-        interpolateDistanceAction.execute();
+        this.level.interpolate(this, 'distanceBeetweenPlayer', 0.9, 500);
 
         this.approachSound.play();
     }
 
     moveAwayFromPlayer() {
-
         this.statuses.CLOSE_TO_PLAYER = false;
-
-        let interpolateDistanceAction = new BABYLON.InterpolateValueAction(
-            BABYLON.ActionManager.NothingTrigger,
-            this,
-            'distanceBeetweenPlayer',
-            1.5,
-            1500
-        );
-
-        this.scene.actionManager.registerAction(interpolateDistanceAction);
-        interpolateDistanceAction.execute();
-
+        this.level.interpolate(this, 'distanceBeetweenPlayer', 1.5, 1500);
     }
 
     attackPlayer() {
         this.attackSound.play();
-
-        let interpolateDistanceAction = new BABYLON.InterpolateValueAction(
-            BABYLON.ActionManager.NothingTrigger,
-            this,
-            'distanceBeetweenPlayer',
-            0.1,
-            300
-        );
-
-        this.scene.actionManager.registerAction(interpolateDistanceAction);
-        interpolateDistanceAction.execute();
+        this.level.interpolate(this, 'distanceBeetweenPlayer', 0.1, 300);
         
-        setTimeout(() => {
-            this.player.die();
-        }, 300);
+        setTimeout(() => this.player.die(), 300);
     }
 
     move() {
         let animationRatio = this.scene.getAnimationRatio();
 
         this.mesh.position.x = this.player.mesh.position.x;
+
+        // Adding some altitude variation on monster altitude using Math.sin
         this.mesh.position.y = (Math.sin(this.mesh.position.z) / 100) + 0.2 + (this.player.mesh.position.y - this.player.defaultAltitude);
+
         this.mesh.position.z = this.player.mesh.position.z - this.distanceBeetweenPlayer;
 
+        // If is chasing the player from more than 100 'meters', move away
         if((this.player.totalTravelledDistance - this.currentPlayerTravelledDistance) > 100 && this.statuses.CLOSE_TO_PLAYER) {
             this.moveAwayFromPlayer();
         }
