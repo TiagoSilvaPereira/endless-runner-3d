@@ -93,8 +93,6 @@ class Player {
         this.setupAnimations();
         this.createHUD();
 
-        //GAME.drawEllipsoid(this.mesh);
-
     }
 
     setupAnimations() {
@@ -133,10 +131,6 @@ class Player {
         });
     }
 
-    setStatus(status, value = true) {
-        this.statuses[status] = value;
-    }
-
     getMesh() {
         return this.mesh;
     }
@@ -149,10 +143,10 @@ class Player {
         this.blink();
         this.speed = this.defaultSpeed / 2;
         
-        this.setStatus('SLOW', true);
+        this.statuses.SLOW = true;
 
         setTimeout(() => {
-            this.setStatus('SLOW', false);
+            this.statuses.SLOW = false;
             this.speed = this.defaultSpeed;
         }, 1500);
 
@@ -213,9 +207,9 @@ class Player {
     checkPlayerAltitude() {
 
         if(this.mesh.position.y < this.lastAltitude) {
-            this.setStatus('FALLING_DOWN', true);
+            this.statuses.FALLING_DOWN = true;
         } else {
-            this.setStatus('FALLING_DOWN', false);
+            this.statuses.FALLING_DOWN = false;
         }
 
         this.lastAltitude = this.mesh.position.y;
@@ -234,7 +228,7 @@ class Player {
 
     checkPlayerJump() {
         if(GAME.keys.up && !this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
-            this.setStatus('JUMPING', true);
+            this.statuses.JUMPING = true;
         }
 
         /**
@@ -246,8 +240,8 @@ class Player {
          */
         if(this.mesh.position.y >= this.jumpMaxAltitude && this.statuses.JUMPING) {
             this.lastAltitude = this.lastAltitude + 100; // Hacking lastAltitude (explained above)
-            this.setStatus('FALLING_DOWN', true);
-            this.setStatus('JUMPING', false);
+            this.statuses.FALLING_DOWN = true;
+            this.statuses.JUMPING = false;
         }
     }
 
@@ -256,13 +250,13 @@ class Player {
         if(GAME.keys.down) {
             
             if(!this.statuses.DRAGGING) {
-                this.setStatus('DRAGGING', true);
+                this.statuses.DRAGGING = true;
                 this.mesh.scaling.y = 0.5;
                 this.mesh.setEllipsoidPerBoundingBox();
                 this.speed = this.defaultSpeed * 1.5;
 
                 setTimeout(() => {
-                    this.setStatus('DRAGGING', false);
+                    this.statuses.DRAGGING = false;
                 }, 700);
             }
             
@@ -297,10 +291,10 @@ class Player {
 
     reset() {
         
-        this.setStatus('DEAD', false);
-        this.setStatus('JUMPING', false);
-        this.setStatus('FALLING_DOWN', false);
-        this.setStatus('DRAGGING', false);
+        this.statuses.DEAD = false;
+        this.statuses.JUMPING = false;
+        this.statuses.FALLING_DOWN = false;
+        this.statuses.DRAGGING = false;
         
         this.coins = 0;
         this.damages = 0;
@@ -316,7 +310,7 @@ class Player {
 
         if(this.godMode) return;
 
-        this.setStatus('DEAD', true);
+        this.statuses.DEAD = true;
         this.dieSound.play();
 
         if(this.onDie) {

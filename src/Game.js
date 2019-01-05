@@ -207,23 +207,4 @@ class Game {
         });
     }
 
-    drawEllipsoid(mesh) {
-        mesh.computeWorldMatrix(true);
-        var ellipsoidMat = mesh.getScene().getMaterialByName("__ellipsoidMat__");
-        if (! ellipsoidMat) { 
-            ellipsoidMat = new BABYLON.StandardMaterial("__ellipsoidMat__", mesh.getScene());
-            ellipsoidMat.wireframe = true;
-            ellipsoidMat.emissiveColor = BABYLON.Color3.Green();
-            ellipsoidMat.specularColor = BABYLON.Color3.Black();
-        }
-        var ellipsoid = BABYLON.Mesh.CreateSphere("__ellipsoid__", 9, 1, mesh.getScene());
-        ellipsoid.scaling = mesh.ellipsoid.clone();
-        ellipsoid.scaling.y *= 2;
-        ellipsoid.scaling.x *= 2;
-        ellipsoid.scaling.z *= 2;
-        ellipsoid.material = ellipsoidMat;
-        ellipsoid.parent = mesh;
-        ellipsoid.computeWorldMatrix(true);
-    }
-
 }
