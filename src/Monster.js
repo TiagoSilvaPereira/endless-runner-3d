@@ -31,7 +31,7 @@ class Monster {
         this.mesh.position.z = this.player.mesh.position.z - this.distanceBeetweenPlayer;
 
         this.monsterMaterial = new BABYLON.StandardMaterial('monsterMaterial', this.scene);
-        this.monsterMaterial.diffuseColor = new BABYLON.Color3(0.47, 0.55, 0.64);
+        this.monsterMaterial.diffuseColor = new BABYLON.Color3.FromHexString(GAME.options.monsterColor);
         this.monsterMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
 
         this.mesh.material = this.monsterMaterial;

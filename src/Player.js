@@ -32,16 +32,16 @@ class Player {
          */
         this.godMode = false;
 
-        this.defaultSpeed = 15;
+        this.defaultSpeed = GAME.options.player.defaultSpeed;
         this.speed = this.defaultSpeed;
 
-        this.gravity = -9;
+        this.gravity = GAME.options.player.gravity;
         
         /**
          * Stores the player last altitude to check if the player is falling down
          */
-        this.jumpForce = 50;
-        this.jumpMaxAltitude = 4.7;
+        this.jumpForce = GAME.options.player.jumpForce;
+        this.jumpMaxAltitude = GAME.options.player.jumpMaxAltitude;
         
         // Stores the last player altitude from every frame
         this.defaultAltitude = 0.25;
@@ -84,7 +84,7 @@ class Player {
         this.mesh.position.y = this.defaultAltitude;
 
         let playerMaterial = new BABYLON.StandardMaterial("playerMaterial", this.scene);
-        playerMaterial.diffuseColor = new BABYLON.Color3.FromHexString('#e74c3c');
+        playerMaterial.diffuseColor = new BABYLON.Color3.FromHexString(GAME.options.playerColor);
 
         this.mesh.material = playerMaterial;
 

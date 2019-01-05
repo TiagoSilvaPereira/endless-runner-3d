@@ -3,7 +3,7 @@ window.GAME = null;
 var app = {
 
     init() {
-        GAME = new Game();
+        GAME = new Game(window.initialGameOptions);
         GAME.start();
     }
 

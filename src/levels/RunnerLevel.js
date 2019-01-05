@@ -7,7 +7,6 @@ class RunnerLevel extends Level {
 
         // Tiles generation control properties
         this.tileDepth = 10;
-        this.holeDepth = 10;
         this.maxTilesAtTime = 20;
         this.lastTileType = 'HOLE';
         this.generatedTilesNumber = 0;
@@ -16,15 +15,14 @@ class RunnerLevel extends Level {
         // Menu
         this.menu = null;
         this.pointsTextControl = null;
-        this.lastRecordTextControl = null;
+        this.currentRecordTextControl = null;
         this.hasMadeRecordTextControl = null;
         
     }
 
     buildScene() {
         
-        this.scene.clearColor = new BABYLON.Color3.FromHexString('#636e72');
-        this.scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
+        this.scene.clearColor = new BABYLON.Color3.FromHexString(GAME.options.backgroundColor);
 
         var music = new BABYLON.Sound('music', '/assets/musics/Guitar-Mayhem.mp3', this.scene, null, { loop: true, autoplay: true, volume: 0.3 });
 
@@ -32,10 +30,11 @@ class RunnerLevel extends Level {
 
         this.createMenus();
 
+        // Sets the active camera
         var camera = this.createArcCamera();
-
-        // This attaches the camera to the canvas
         this.scene.activeCamera = camera;
+
+        // Uncomment it to allow free camera rotation
         //camera.attachControl(GAME.canvas, true);
 
         // Add lights to the scene
@@ -54,17 +53,17 @@ class RunnerLevel extends Level {
     createCommonMaterials() {
         
         let coinMaterial = new BABYLON.StandardMaterial('coinMaterial', this.scene);
-        coinMaterial.diffuseColor = new BABYLON.Color3.FromHexString('#f1c40f');
-        coinMaterial.emissiveColor = new BABYLON.Color3.FromHexString('#f1c40f');
+        coinMaterial.diffuseColor = new BABYLON.Color3.FromHexString(GAME.options.coinColor);
+        coinMaterial.emissiveColor = new BABYLON.Color3.FromHexString(GAME.options.coinColor);
 
         let tileMaterialLight = new BABYLON.StandardMaterial("tileMaterialLight", this.scene);
-        tileMaterialLight.diffuseColor = new BABYLON.Color3(0.95, 0.65, 0.51);
+        tileMaterialLight.diffuseColor = new BABYLON.Color3.FromHexString(GAME.options.tileLightColor);
         
         let tileMaterialDark = new BABYLON.StandardMaterial("tileMaterialDark", this.scene);
-        tileMaterialDark.diffuseColor = new BABYLON.Color3(0.95, 0.56, 0.40);
+        tileMaterialDark.diffuseColor = new BABYLON.Color3.FromHexString(GAME.options.tileDarkColor);
 
         let hazardMaterial = new BABYLON.StandardMaterial("hazardMaterial", this.scene);
-        hazardMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.5, 0.1);
+        hazardMaterial.diffuseColor = new BABYLON.Color3.FromHexString(GAME.options.hazardColor);
         hazardMaterial.alpha = 0.6;
         
         // Freeze materials to improve performance (this material will not be modified)
@@ -84,21 +83,21 @@ class RunnerLevel extends Level {
         
         this.pointsTextControl = this.menu.addText('Points: 0', {
             'top': '-150px',
-            'color': '#f39c12',
-            'outlineColor': '#000000',
+            'color': GAME.options.pointsTextColor,
+            'outlineColor': GAME.options.pointsOutlineTextColor,
             'outlineWidth': '2px',
             'fontSize': '40px',
             'verticalAlignment': BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER
         });
 
-        this.lastRecordTextControl = this.menu.addText('Current Record: 0', {
+        this.currentRecordTextControl = this.menu.addText('Current Record: 0', {
             'top': '-100px',
             'verticalAlignment': BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER
         });
 
         this.hasMadeRecordTextControl = this.menu.addText('You got a new Points Record!', {
             'top': '-60px',
-            'color': '#f39c12',
+            'color': GAME.options.recordTextColor,
             'fontSize': '20px',
             'verticalAlignment': BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER
         });
@@ -126,7 +125,7 @@ class RunnerLevel extends Level {
     }
 
     createPlayer() {
-        // Creates the player and set it as camera target
+        // Creates the player and sets it as camera target
         this.player = new Player(this.scene);
         this.scene.activeCamera.lockedTarget = this.player.getMesh();
 
@@ -149,7 +148,7 @@ class RunnerLevel extends Level {
 
     showMenu() {
         this.pointsTextControl.text = 'Points: ' + this.player.getPoints();
-        this.lastRecordTextControl.text = 'Current Record: ' + this.player.getLastRecord();
+        this.currentRecordTextControl.text = 'Current Record: ' + this.player.getLastRecord();
         this.menu.show();
 
         if(this.player.hasMadePointsRecord()) {
@@ -190,7 +189,7 @@ class RunnerLevel extends Level {
                 disposeAfterCollision: true
             };
 
-            // If is the first tile at time (skips first generation because is not necessary), 
+            // If is the first tile at time (skips first generation because it is not necessary), 
             // adds a collider (this collider will be used to delete the old tiles)
             // whenever the player intersects it.
             if(currentTilesNumber == 1 && this.generatedTilesNumber != 1) {
@@ -211,7 +210,7 @@ class RunnerLevel extends Level {
                 // Copy default options
                 let colliderOptions = Object.assign({}, collidersDefaultOptions);
                 colliderOptions.onCollide = () => {
-                    this.generateGroundTiles()
+                    this.generateGroundTiles();
                 }
 
                 this.addCollider('generateMoreTilesCollider', colliderOptions);

@@ -34,7 +34,7 @@ class CreditsLevel extends Level {
 
         ui.addButton('backButton', 'Return to Home', {
             'top': '220px',
-            'background': '#636e72',
+            'background': GAME.options.backgroundColor,
             'color': 'white',
             'onclick': () => GAME.goToLevel('HomeMenuLevel')
         });

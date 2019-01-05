@@ -1,6 +1,11 @@
 class Game {
 
-    constructor() {
+    constructor(options = {}) {
+
+        /**
+         * Sets game options
+         */
+        this.options = options;
 
         /**
          * Keyboard pressed keys
