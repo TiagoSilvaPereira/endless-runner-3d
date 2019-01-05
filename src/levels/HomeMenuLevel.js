@@ -10,11 +10,15 @@ class HomeMenuLevel extends Level {
         var menu = new UI('homeMenuUI');
         
         menu.addButton('playButton', 'Play Game', {
+            'background': '#636e72',
+            'color': 'white',
             'onclick': () => GAME.goToLevel('RunnerLevel')
         });
         
         menu.addButton('creditsButton', 'Credits', {
             'top': '70px',
+            'background': '#636e72',
+            'color': 'white',
             'onclick': () => GAME.goToLevel('CreditsLevel')
         });
 

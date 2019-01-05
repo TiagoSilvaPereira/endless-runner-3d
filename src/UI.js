@@ -12,6 +12,8 @@ class UI {
         button.width = options.width || 0.5;
         button.height = options.height || '60px';
         button.color = options.color || 'black';
+        button.outlineWidth = options.outlineWidth || 0;
+        button.outlineColor = options.outlineColor || button.color;
         button.background = options.background || 'white';
         button.left = options.left || '0px';
         button.top = options.top || '0px';
@@ -33,7 +35,7 @@ class UI {
         textControl.text = text;
         textControl.color = options.color || 'white';
         textControl.fontSize = options.fontSize || 28;
-        textControl.outlineWidth = options.outlineWidth || 2;
+        textControl.outlineWidth = options.outlineWidth || 0;
         textControl.outlineColor = options.outlineColor || "black";
         textControl.lineSpacing = options.lineSpacing || '5px';
         textControl.left = options.left || '0px';

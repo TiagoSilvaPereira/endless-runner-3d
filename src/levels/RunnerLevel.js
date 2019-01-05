@@ -23,10 +23,10 @@ class RunnerLevel extends Level {
 
     buildScene() {
         
-        this.scene.clearColor = new BABYLON.Color3(0.39, 0.80, 0.85);
+        this.scene.clearColor = new BABYLON.Color3.FromHexString('#636e72');
         this.scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
 
-        var music = new BABYLON.Sound('music', '/assets/musics/Guitar-Mayhem.mp3', this.scene, null, { loop: true, autoplay: true, volume: 0.7 });
+        var music = new BABYLON.Sound('music', '/assets/musics/Guitar-Mayhem.mp3', this.scene, null, { loop: true, autoplay: true, volume: 0.5 });
 
         // Adding an action manager to this scene
         this.scene.actionManager = new BABYLON.ActionManager(this.scene);
@@ -39,7 +39,7 @@ class RunnerLevel extends Level {
 
         // This attaches the camera to the canvas
         this.scene.activeCamera = camera;
-        camera.attachControl(GAME.canvas, true);
+        //camera.attachControl(GAME.canvas, true);
 
         // Add lights to the scene
         var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 10, 0), this.scene);
@@ -88,6 +88,8 @@ class RunnerLevel extends Level {
         this.pointsTextControl = this.menu.addText('Points: 0', {
             'top': '-150px',
             'color': '#f39c12',
+            'outlineColor': '#000000',
+            'outlineWidth': '2px',
             'fontSize': '40px',
             'verticalAlignment': BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER
         });
@@ -243,8 +245,11 @@ class RunnerLevel extends Level {
             'NORMAL_GROUND',
             'GROUND_WITH_TOTAL_OBSTACLE',
             'NORMAL_GROUND',
-            'GROUND_WITH_HIGH_OBSTACLE'
-        ], 
+            'NORMAL_GROUND',
+            'GROUND_WITH_HIGH_OBSTACLE',
+            'NORMAL_GROUND',
+        ],
+
         tyleType = 'NORMAL_GROUND';
 
         // If the player is starting to play (first 200 'meters'), creates normal ground tiles
@@ -280,7 +285,7 @@ class RunnerLevel extends Level {
 
     createTile(options) {
 
-        options = options ? options : { width: 1, height: 1, depth: this.tileDepth };
+        options = options ? options : { width: 1.5, height: 1, depth: this.tileDepth };
 
         let tile = BABYLON.MeshBuilder.CreateBox("groundTile" + this.generatedTilesNumber, options, this.scene);
         BABYLON.Tags.AddTagsTo(tile, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
@@ -367,8 +372,8 @@ class RunnerLevel extends Level {
     createNormalGroundTile() {
         let tile = this.createTile();
         
-        // 40% chances to generate coins on the tile
-        if(Math.floor((Math.random() * 100)) > 60) {
+        // 60% chances to generate coins on the tile
+        if(Math.floor((Math.random() * 100)) > 40) {
             this.createCoins(tile, true);
         }
     }

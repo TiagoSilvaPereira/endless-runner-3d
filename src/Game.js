@@ -37,6 +37,8 @@ class Game {
 
     start() {
         this.listenKeys();
+        this.lintenTouchEvents();
+        this.listenDeviceOrientationEvents();
         this.listenOtherEvents();
         this.startLevel();
         this.render();
@@ -90,6 +92,71 @@ class Game {
                 this.keys.right = 0;
             }
         }
+    }
+
+    lintenTouchEvents() {
+        var hammertime = new Hammer(document.body);
+        hammertime.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+
+        hammertime.on('swipeup', (ev) => {
+            this.keys.up = 1;
+
+            // Resets the key after some milleseconds
+            setTimeout(() => {
+                this.keys.up = 0;
+            }, 150);
+        });
+
+        hammertime.on('swipedown', (ev) => {
+            this.keys.down = 1;
+
+            setTimeout(() => {
+                this.keys.down = 0;
+            }, 100);
+        });
+
+        hammertime.on('swipeleft', (ev) => {
+            this.keys.left = 1;
+            
+            setTimeout(() => {
+                this.keys.left = 0;
+            }, 150);
+        });
+
+        hammertime.on('swiperight', (ev) => {
+            this.keys.right = 1;
+
+            setTimeout(() => {
+                this.keys.right = 0;
+            }, 150);
+        });
+    }
+
+    listenDeviceOrientationEvents() {
+        // var gn = new GyroNorm();
+
+        // gn.init().then(() => {
+        //     gn.start((data) => {
+        //         console.log(data.do.alpha, data.do.beta, data.do.gamma, data.dm.gx, data.dm.gy, data.dm.gz)
+        //         if(data.dm.gx > 0.5) {
+        //             this.keys.right = 0.05;
+        //             this.keys.left = 0;
+        //         } else if (data.dm.gx < -0.5) {
+        //             this.keys.right = 0;
+        //             this.keys.left = 0.05;
+        //         } else {
+        //             this.keys.right = 0;
+        //             this.keys.left = 0;
+        //         }
+        //     });
+        // }).catch(function(e){
+        //     console.log('not')
+        // });
+
+    }
+
+    deviceOrientationListener(event) {
+        console.log(event.alpha)
     }
 
     listenOtherEvents() {
