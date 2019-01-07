@@ -160,6 +160,7 @@ class RunnerLevel extends Level {
 
     createMonster() {
         this.monster = new Monster(this);
+        // Add monster shadow
         this.scene.shadowGenerator.getShadowMap().renderList.push(this.monster.mesh);
     }
 
@@ -179,14 +180,11 @@ class RunnerLevel extends Level {
             // Set visible to true to see the colliders on the scene
             let collidersDefaultOptions = {
                 width: 100, 
-                height: 100, 
-                depth: 1,
-                x:0, 
-                y: 0, 
-                z: ((this.generatedTilesNumber - 1) * this.tileDepth),
-                collisionMesh: this.player.getMesh(),
+                height: 100,
                 visible: false,
-                disposeAfterCollision: true
+                disposeAfterCollision: true,
+                collisionMesh: this.player.getMesh(),
+                positionZ: ((this.generatedTilesNumber - 1) * this.tileDepth),
             };
 
             // If is the first tile at time (skips first generation because it is not necessary), 
@@ -241,9 +239,9 @@ class RunnerLevel extends Level {
             'NORMAL_GROUND',
             'GROUND_WITH_TOTAL_OBSTACLE',
             'NORMAL_GROUND',
-            'NORMAL_GROUND',
             'GROUND_WITH_HIGH_OBSTACLE',
-            'NORMAL_GROUND',
+            'HOLE',
+            'SMALL_GROUND',
         ],
 
         tyleType = 'NORMAL_GROUND';
@@ -281,7 +279,7 @@ class RunnerLevel extends Level {
 
     createTile(options) {
 
-        options = options ? options : { width: 1.5, height: 1, depth: this.tileDepth };
+        options = options ? options : { width: GAME.options.level.tileWidth, height: 1, depth: this.tileDepth };
 
         let tile = BABYLON.MeshBuilder.CreateBox("groundTile" + this.generatedTilesNumber, options, this.scene);
         BABYLON.Tags.AddTagsTo(tile, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
@@ -312,11 +310,11 @@ class RunnerLevel extends Level {
             let randomPositionChooser = Math.floor((Math.random() * 100)); // 0 to 100 random number
 
             if(randomPositionChooser <= 33) {
-                positionX = -0.3333;
+                positionX = -0.3333; // Positining on the left
             }
             
             if(randomPositionChooser >= 66) {
-                positionX = 0.3333;
+                positionX = 0.3333; // Positioning on the right
             }
         }
 
@@ -337,8 +335,8 @@ class RunnerLevel extends Level {
              */
             let playerMesh = this.player.getMesh();
             coin.executeOnIntersection(playerMesh, () => {
-                this.interpolate(coin.position, 'y', 10, 500);
                 this.player.keepCoin();
+                this.interpolate(coin.position, 'y', 10, 500);
             }, true);
 
         }
@@ -354,7 +352,7 @@ class RunnerLevel extends Level {
     }
 
     createSmallGroundTile() {
-        let tile = this.createTile({ width: 0.3333, height: 1, depth: this.tileDepth});
+        let tile = this.createTile({ width: GAME.options.level.smallTileWidth, height: 1, depth: this.tileDepth});
         
         // Choose the side to place the ground
         let randomSideChooser = Math.floor((Math.random() * 100) + 1);
@@ -369,7 +367,7 @@ class RunnerLevel extends Level {
     createTileWithObstacleTile() {
 
         let tile = this.createTile();
-        let obstacle = BABYLON.MeshBuilder.CreateBox("obstacleTile" + this.generatedTilesNumber, {width: 0.9, height: 0.05, depth: 8.25}, this.scene);
+        let obstacle = BABYLON.MeshBuilder.CreateBox("obstacleTile" + this.generatedTilesNumber, {width: GAME.options.level.hazardWidth, height: 0.05, depth: 8.25}, this.scene);
         BABYLON.Tags.AddTagsTo(obstacle, 'tilesBlock tilesBlock' + this.generatedTilesBlocksNumber);
         
         obstacle.position.z = tile.position.z;

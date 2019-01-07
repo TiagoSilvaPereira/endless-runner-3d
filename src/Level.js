@@ -54,17 +54,17 @@ class Level {
     addCollider(name, options) {
         
         let collider = BABYLON.MeshBuilder.CreateBox(name, {
-            width: options.width, 
-            height: options.height, 
-            depth: options.depth
+            width: options.width || 1, 
+            height: options.height || 1, 
+            depth: options.depth || 1
         }, this.scene);
 
         // Add a tag to identify the object as collider and to simplify group operations (like dispose)
         BABYLON.Tags.AddTagsTo(collider, 'collider boxCollider');
 
-        collider.position.x = options.x || 0;
-        collider.position.y = options.y || 0;
-        collider.position.z = options.z || 0;
+        collider.position.x = options.positionX || 0;
+        collider.position.y = options.positionY || 0;
+        collider.position.z = options.positionZ || 0;
 
         collider.isVisible = (options.visible) ? options.visible : false;
 

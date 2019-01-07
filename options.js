@@ -23,7 +23,13 @@ window.initialGameOptions = {
         'defaultSpeed': 15,
         'gravity': -9,
         'jumpForce': 50,
-        'jumpMaxAltitude': 4.7
+        'jumpMaxAltitude': 5
+    },
+
+    'level': {
+        'tileWidth': 1.8,
+        'smallTileWidth': 0.45,
+        'hazardWidth': 1.4,
     },
 
 };
