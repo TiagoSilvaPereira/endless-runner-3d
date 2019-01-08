@@ -26,7 +26,6 @@ class RunnerLevel extends Level {
 
         //var music = new BABYLON.Sound('music', '/assets/musics/Guitar-Mayhem.mp3', this.scene, null, { loop: true, autoplay: true, volume: 0.3 });
         this.assets.addMusic('music', '/assets/musics/Guitar-Mayhem.mp3');
-        this.assets.load();
 
         this.createCommonMaterials();
 

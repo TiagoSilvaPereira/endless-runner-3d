@@ -39,4 +39,10 @@ class Log {
         console.log(this.logs);
     }
 
+    debug(data) {
+        if(GAME.options.debugMode) {
+            console.log(data);
+        }
+    }
+
 }

@@ -1,6 +1,6 @@
 class AssetsDatabase {
     
-    constructor(scene) {
+    constructor(scene, finishCallback) {
 
         this.scene = scene;
 
@@ -9,14 +9,20 @@ class AssetsDatabase {
 
         this.manager = new BABYLON.AssetsManager(this.scene);
 
+        this.manager.onFinish = (tasks) => {
+            if(finishCallback) finishCallback(tasks);
+        };
+
     }
 
-    addMesh() {
-
-    }
-
+    /**
+     * Adds a sound to be loaded
+     * @param {*} name 
+     * @param {*} file 
+     * @param {*} options 
+     */
     addSound(name, file, options) {
-        let fileTask = this.manager.addBinaryFileTask(name + '__Task', file);
+        let fileTask = this.manager.addBinaryFileTask(name + '__SoundTask', file);
         
         this.sounds[name] = {};
 
@@ -42,6 +48,10 @@ class AssetsDatabase {
 
         return this.addSound(name, file, options);
 
+    }
+
+    addMesh() {
+        // To be implemented
     }
 
     getMesh(name) {

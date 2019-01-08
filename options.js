@@ -4,6 +4,9 @@ window.initialGameOptions = {
      * Colors (All in Hexadecimal)
      */
     
+    // Main Options
+    'debugMode': true, // Disable It to remove debug messages from console
+
     // Object Colors
     'backgroundColor': '#636e72',
     'playerColor': '#e74c3c',

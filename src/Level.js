@@ -27,18 +27,26 @@ class Level {
         // Create the scene space
         this.scene = new BABYLON.Scene(GAME.engine);
 
-        this.assets = new AssetsDatabase(this.scene);
-        
+        // Add assets management and execute beforeRender after finish
+        this.assets = new AssetsDatabase(this.scene, () => {
+
+            GAME.log.debug('Level Assets loaded');
+
+            // If has the beforeRender method
+            if(this.beforeRender) {
+                this.scene.registerBeforeRender(
+                    this.beforeRender.bind(this)
+                );
+            }
+
+        });
+
         if(this.buildScene) {
             this.buildScene();
         }
 
-        // If has the beforeRender method
-        if(this.beforeRender) {
-            this.scene.registerBeforeRender(
-                this.beforeRender.bind(this)
-            );
-        }
+        // Load the assets
+        this.assets.load();
 
         return this.scene;
     }
