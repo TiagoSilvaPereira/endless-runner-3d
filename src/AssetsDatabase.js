@@ -20,13 +20,28 @@ class AssetsDatabase {
         
         this.sounds[name] = {};
 
-        fileTask.onSuccess = function (task) {
-            this.sounds[name] = new BABYLON.Sound("Violons18", task.data, scene, soundReady, { loop: true });
+        fileTask.onSuccess = (task) => {
+            this.sounds[name] = new BABYLON.Sound(name, task.data, this.scene, null, options);
         }
+
+        return this.sounds[name];
     }
 
-    addMusic() {
-        
+    /**
+     * Adds a music (sound with some predefined parametes that can be overwriten)
+     * By default, musics are automatically played in loop
+     * @param {*} name 
+     * @param {*} file 
+     * @param {*} options 
+     */
+    addMusic(name, file, options = {}) {
+
+        options.loop = (typeof options.loop !== 'undefined') ? options.loop : true;
+        options.volume = (typeof options.volume !== 'undefined') ? options.volume : 0.5;
+        options.autoplay = (typeof options.autoplay !== 'undefined') ? options.autoplay : true;
+
+        return this.addSound(name, file, options);
+
     }
 
     getMesh(name) {
@@ -35,6 +50,10 @@ class AssetsDatabase {
 
     getSound(name) {
         return this.sounds[name];
+    }
+
+    load() {
+        this.manager.load();
     }
 
 }

@@ -24,7 +24,9 @@ class RunnerLevel extends Level {
         
         this.scene.clearColor = new BABYLON.Color3.FromHexString(GAME.options.backgroundColor);
 
-        var music = new BABYLON.Sound('music', '/assets/musics/Guitar-Mayhem.mp3', this.scene, null, { loop: true, autoplay: true, volume: 0.3 });
+        //var music = new BABYLON.Sound('music', '/assets/musics/Guitar-Mayhem.mp3', this.scene, null, { loop: true, autoplay: true, volume: 0.3 });
+        this.assets.addMusic('music', '/assets/musics/Guitar-Mayhem.mp3');
+        this.assets.load();
 
         this.createCommonMaterials();
 

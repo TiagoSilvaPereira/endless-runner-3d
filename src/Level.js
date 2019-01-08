@@ -9,6 +9,8 @@ class Level {
 
         this.scene = null;
 
+        this.assets = null;
+
     }
 
     start() {
@@ -24,6 +26,8 @@ class Level {
     createScene() {
         // Create the scene space
         this.scene = new BABYLON.Scene(GAME.engine);
+
+        this.assets = new AssetsDatabase(this.scene);
         
         if(this.buildScene) {
             this.buildScene();
