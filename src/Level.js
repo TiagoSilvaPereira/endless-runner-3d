@@ -19,6 +19,8 @@ class Level {
         
         if(this.setProperties) {
             this.setProperties();
+        } else {
+            GAME.log.debugWarning('The setProperties method is recommended to initialize the Level properties');
         }
 
         this.createScene();
@@ -35,6 +37,8 @@ class Level {
 
             if(this.buildScene) {
                 this.buildScene();
+            } else {
+                GAME.log.debugWarning('You can add the buildScene method to your level to define your scene');
             }
 
             // If has the beforeRender method
@@ -42,6 +46,8 @@ class Level {
                 this.scene.registerBeforeRender(
                     this.beforeRender.bind(this)
                 );
+            } else {
+                GAME.log.debugWarning('You can define animations and other game logics that happends inside the main loop on the beforeRender method');
             }
 
             GAME.startRenderLoop();
@@ -155,8 +161,9 @@ class Level {
      * @param {*} property The property in the object to interpolate
      * @param {*} toValue The final value of interpolation
      * @param {*} duration The interpolation duration in milliseconds
+     * @param {*} afterExecutionCallback Callback executed after ther interpolation ends
      */
-    interpolate(target, property, toValue, duration) {
+    interpolate(target, property, toValue, duration, afterExecutionCallback = null) {
 
         if(!this.scene.actionManager) {
             this.scene.actionManager = new BABYLON.ActionManager(this.scene);
@@ -169,6 +176,11 @@ class Level {
             toValue,
             duration
         );
+
+        interpolateAction.onInterpolationDoneObservable.add(() => {
+            GAME.log.debug('Interpolation done');
+            if(afterExecutionCallback) afterExecutionCallback();
+        });
 
         this.scene.actionManager.registerAction(interpolateAction);
         interpolateAction.execute();

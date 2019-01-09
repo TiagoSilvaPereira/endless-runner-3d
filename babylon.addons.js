@@ -25,9 +25,10 @@ BABYLON.Mesh.prototype.executeOnIntersection = function(intersectionMesh, callba
  * Thanks Wingnut
  */ 
 BABYLON.Mesh.prototype.setEllipsoidPerBoundingBox = function(scene) {
-    var bi = this.getBoundingInfo();
-    var bb = bi.boundingBox;
-    this.ellipsoid = bb.maximumWorld.subtract(bb.minimumWorld).scale(0.5);
+    var boundingBoxInfo = this.getBoundingInfo();
+    var meshBoundingBox = boundingBoxInfo.boundingBox;
+    
+    this.ellipsoid = meshBoundingBox.maximumWorld.subtract(meshBoundingBox.minimumWorld).scale(0.5);
 }
 
 /**

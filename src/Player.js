@@ -89,6 +89,7 @@ class Player {
 
         this.mesh.material = playerMaterial;
 
+        // Adds the collision ellipsoid fitting it on the Player "Box" mesh
         this.mesh.setEllipsoidPerBoundingBox();
 
         this.setupAnimations();
@@ -252,12 +253,25 @@ class Player {
             
             if(!this.statuses.DRAGGING) {
                 this.statuses.DRAGGING = true;
-                this.mesh.scaling.y = 0.5;
-                this.mesh.setEllipsoidPerBoundingBox();
                 this.speed = this.defaultSpeed * 1.5;
+
+                // Smoothly interpolate the Player height to a half and then, readjust
+                // the collision ellipsoid
+                this.level.interpolate(this.mesh.scaling, 'y', 0.5, 100, () => {
+                    // Manually reseting the collision ellipsoid height (mesh height/4)
+                    this.mesh.ellipsoid.y = 0.125;
+                });
 
                 setTimeout(() => {
                     this.statuses.DRAGGING = false;
+
+                    // Manually reseting the collision ellipsoid height (future mesh height/4)
+                    // We need to make it before interpolation to avoid collision problems during 
+                    // the interpolation proccess
+                    this.mesh.ellipsoid.y = 0.25;
+
+                    // Return the player to the normal height
+                    this.level.interpolate(this.mesh.scaling, 'y', 1, 100);
                 }, 700);
             }
             
@@ -267,9 +281,6 @@ class Player {
                 if(!this.statuses.JUMPING && !this.statuses.FALLING_DOWN) {
                     this.mesh.position.y = this.defaultAltitude;
                 }
-    
-                this.mesh.scaling.y = 1;
-                this.mesh.setEllipsoidPerBoundingBox();
                 
                 if(!this.statuses.SLOW) {
                     this.speed = this.defaultSpeed;

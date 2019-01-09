@@ -41,7 +41,19 @@ class Log {
 
     debug(data) {
         if(GAME.options.debugMode) {
-            console.log(data);
+            console.log('DEBUG LOG: ' + data);
+        }
+    }
+
+    debugWarning(data) {
+        if(GAME.options.debugMode) {
+            console.warn('DEBUG LOG: ' + data);
+        }
+    }
+
+    debugError(data) {
+        if(GAME.options.debugMode) {
+            console.error('DEBUG LOG: ' + data);
         }
     }
 
