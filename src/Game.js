@@ -45,7 +45,6 @@ class Game {
         this.lintenTouchEvents();
         this.listenOtherEvents();
         this.startLevel();
-        this.render();
     }
 
     pause() {
@@ -169,8 +168,7 @@ class Game {
     }
 
     render() {
-
-        this.renderLoop();
+        this.startRenderLoop();
 
         window.addEventListener("resize", () => { 
             this.engine.resize();
@@ -178,10 +176,14 @@ class Game {
 
     }
 
-    renderLoop() {
+    startRenderLoop() {
         this.engine.runRenderLoop(() => {
             this.currentLevel.scene.render();
         });
+    }
+
+    stopRenderLoop() {
+        this.engine.stopRenderLoop();
     }
 
 }

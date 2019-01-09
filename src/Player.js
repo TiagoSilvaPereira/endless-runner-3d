@@ -1,8 +1,9 @@
 class Player {
 
-    constructor(scene) {
+    constructor(level) {
         
-        this.scene = scene;
+        this.level = level;
+        this.scene = level.scene;
 
         this.statuses = {
             'RUNNING': true,
@@ -71,9 +72,9 @@ class Player {
 
     setupPlayer() {
         
-        this.dieSound = new BABYLON.Sound('playerDieSound', '/assets/sounds/game-die.mp3', this.scene, null, {volume: 0.4});
-        this.gotCoinSound = new BABYLON.Sound('gotCoinSound', '/assets/sounds/coin-c-09.wav', this.scene);
-        this.damageSound = new BABYLON.Sound('damageSound', '/assets/sounds/damage.wav', this.scene);
+        this.dieSound = this.level.assets.getSound('playerDieSound');
+        this.gotCoinSound = this.level.assets.getSound('gotCoinSound');
+        this.damageSound = this.level.assets.getSound('damageSound');
 
         this.mesh = BABYLON.MeshBuilder.CreateBox("player", {
             width: 0.3333333, 

@@ -20,11 +20,18 @@ class RunnerLevel extends Level {
         
     }
 
+    setupAssets() {
+
+        this.assets.addMusic('music', '/assets/musics/Guitar-Mayhem.mp3');
+        this.assets.addSound('playerDieSound', '/assets/sounds/game-die.mp3', { volume: 0.4 });
+        this.assets.addSound('gotCoinSound', '/assets/sounds/coin-c-09.wav');
+        this.assets.addSound('damageSound', '/assets/sounds/damage.wav');
+        
+    }
+
     buildScene() {
         
         this.scene.clearColor = new BABYLON.Color3.FromHexString(GAME.options.backgroundColor);
-
-        this.assets.addMusic('music', '/assets/musics/Guitar-Mayhem.mp3');
 
         this.createCommonMaterials();
 
@@ -126,7 +133,7 @@ class RunnerLevel extends Level {
 
     createPlayer() {
         // Creates the player and sets it as camera target
-        this.player = new Player(this.scene);
+        this.player = new Player(this);
         this.scene.activeCamera.lockedTarget = this.player.getMesh();
 
         var playerLight = new BABYLON.DirectionalLight("playerLight", new BABYLON.Vector3(1,-2, 1), this.scene);

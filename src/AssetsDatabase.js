@@ -23,11 +23,14 @@ class AssetsDatabase {
      */
     addSound(name, file, options) {
         let fileTask = this.manager.addBinaryFileTask(name + '__SoundTask', file);
-        
-        this.sounds[name] = {};
 
         fileTask.onSuccess = (task) => {
             this.sounds[name] = new BABYLON.Sound(name, task.data, this.scene, null, options);
+            
+            // Execute a success callback
+            if(options.onSuccess) {
+                options.onSuccess(this.sounds[name]);
+            }
         }
 
         return this.sounds[name];

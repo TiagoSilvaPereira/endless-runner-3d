@@ -15,6 +15,7 @@ class Level {
 
     start() {
         GAME.resume();
+        GAME.stopRenderLoop();
         
         if(this.setProperties) {
             this.setProperties();
@@ -32,6 +33,10 @@ class Level {
 
             GAME.log.debug('Level Assets loaded');
 
+            if(this.buildScene) {
+                this.buildScene();
+            }
+
             // If has the beforeRender method
             if(this.beforeRender) {
                 this.scene.registerBeforeRender(
@@ -39,10 +44,12 @@ class Level {
                 );
             }
 
+            GAME.startRenderLoop();
+
         });
 
-        if(this.buildScene) {
-            this.buildScene();
+        if(this.setupAssets) {
+            this.setupAssets();
         }
 
         // Load the assets
