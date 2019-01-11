@@ -4,7 +4,7 @@ window.initialGameOptions = {
      * Main Options
      */
     
-    'debugMode': true, // Disable It to remove debug messages from console
+    'debugMode': false, // Enable it to show debug messages on console
 
     /**
      * Colors (All in Hexadecimal)
