@@ -90,14 +90,28 @@
 /*!*********************!*\
   !*** ./src/Game.js ***!
   \*********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Game; });
+/* harmony import */ var _base_Log_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base/Log.js */ "./src/base/Log.js");
+/* harmony import */ var _game_levels_RunnerLevel_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game/levels/RunnerLevel.js */ "./src/game/levels/RunnerLevel.js");
+/* harmony import */ var _game_levels_CreditsLevel_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game/levels/CreditsLevel.js */ "./src/game/levels/CreditsLevel.js");
+/* harmony import */ var _game_levels_HomeMenuLevel_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./game/levels/HomeMenuLevel.js */ "./src/game/levels/HomeMenuLevel.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// Base
+ // Game Levels
+
+
+
+
 
 var Game =
 /*#__PURE__*/
@@ -125,7 +139,7 @@ function () {
      * Can be used to log objects and debug the game
      */
 
-    this.log = new Log();
+    this.log = new _base_Log_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
     /**
      * Starts the BABYLON engine on the Canvas element
      */
@@ -135,9 +149,9 @@ function () {
     this.currentLevel = null;
     this.currentLevelName = 'HomeMenuLevel';
     this.levels = {
-      'HomeMenuLevel': new HomeMenuLevel(),
-      'CreditsLevel': new CreditsLevel(),
-      'RunnerLevel': new RunnerLevel()
+      'HomeMenuLevel': new _game_levels_HomeMenuLevel_js__WEBPACK_IMPORTED_MODULE_3__["default"](),
+      'CreditsLevel': new _game_levels_CreditsLevel_js__WEBPACK_IMPORTED_MODULE_2__["default"](),
+      'RunnerLevel': new _game_levels_RunnerLevel_js__WEBPACK_IMPORTED_MODULE_1__["default"]()
     };
   }
 
@@ -303,40 +317,39 @@ function () {
   return Game;
 }();
 
+
+
 /***/ }),
 
 /***/ "./src/app.js":
 /*!********************!*\
   !*** ./src/app.js ***!
   \********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-// Base Logic
-__webpack_require__(/*! ./base/Log.js */ "./src/base/Log.js");
-
-__webpack_require__(/*! ./base/UI.js */ "./src/base/UI.js");
-
-var Level = __webpack_require__(/*! ./base/Level.js */ "./src/base/Level.js");
-
-__webpack_require__(/*! ./base/AssetsDatabase.js */ "./src/base/AssetsDatabase.js"); // Game Logic
-
-
-__webpack_require__(/*! ./game/Player.js */ "./src/game/Player.js");
-
-__webpack_require__(/*! ./game/Monster.js */ "./src/game/Monster.js"); // Game Levels
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _base_AssetsDatabase_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base/AssetsDatabase.js */ "./src/base/AssetsDatabase.js");
+/* harmony import */ var _game_Player_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game/Player.js */ "./src/game/Player.js");
+/* harmony import */ var _game_Monster_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game/Monster.js */ "./src/game/Monster.js");
+/* harmony import */ var _Game_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Game.js */ "./src/Game.js");
+ // Game Logic
 
 
-__webpack_require__(/*! ./game/levels/HomeMenuLevel.js */ "./src/game/levels/HomeMenuLevel.js");
-
-__webpack_require__(/*! ./game/levels/CreditsLevel.js */ "./src/game/levels/CreditsLevel.js");
-
-__webpack_require__(/*! ./game/levels/generators/TilesGenerator.js */ "./src/game/levels/generators/TilesGenerator.js");
-
-__webpack_require__(/*! ./game/levels/RunnerLevel.js */ "./src/game/levels/RunnerLevel.js"); // The Game main class
+ // The Game main class
 
 
-__webpack_require__(/*! ./Game.js */ "./src/Game.js");
+window.GAME = null;
+var app = {
+  init: function init() {
+    GAME = new _Game_js__WEBPACK_IMPORTED_MODULE_3__["default"](window.initialGameOptions);
+    GAME.start();
+  }
+};
+window.addEventListener('load', function () {
+  app.init();
+});
 
 /***/ }),
 
@@ -344,9 +357,12 @@ __webpack_require__(/*! ./Game.js */ "./src/Game.js");
 /*!************************************!*\
   !*** ./src/base/AssetsDatabase.js ***!
   \************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return AssetsDatabase; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -434,20 +450,28 @@ function () {
   return AssetsDatabase;
 }();
 
+
+
 /***/ }),
 
 /***/ "./src/base/Level.js":
 /*!***************************!*\
   !*** ./src/base/Level.js ***!
   \***************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Level; });
+/* harmony import */ var _AssetsDatabase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AssetsDatabase */ "./src/base/AssetsDatabase.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
 
 var Level =
 /*#__PURE__*/
@@ -485,7 +509,7 @@ function () {
       // Create the scene space
       this.scene = new BABYLON.Scene(GAME.engine); // Add assets management and execute beforeRender after finish
 
-      this.assets = new AssetsDatabase(this.scene, function () {
+      this.assets = new _AssetsDatabase__WEBPACK_IMPORTED_MODULE_0__["default"](this.scene, function () {
         GAME.log.debug('Level Assets loaded');
 
         if (_this.buildScene) {
@@ -628,15 +652,20 @@ function () {
   return Level;
 }();
 
+
+
 /***/ }),
 
 /***/ "./src/base/Log.js":
 /*!*************************!*\
   !*** ./src/base/Log.js ***!
   \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Log; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -725,15 +754,20 @@ function () {
   return Log;
 }();
 
+
+
 /***/ }),
 
 /***/ "./src/base/UI.js":
 /*!************************!*\
   !*** ./src/base/UI.js ***!
   \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -813,15 +847,20 @@ function () {
   return UI;
 }();
 
+
+
 /***/ }),
 
 /***/ "./src/game/Monster.js":
 /*!*****************************!*\
   !*** ./src/game/Monster.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Monster; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -918,20 +957,28 @@ function () {
   return Monster;
 }();
 
+
+
 /***/ }),
 
 /***/ "./src/game/Player.js":
 /*!****************************!*\
   !*** ./src/game/Player.js ***!
   \****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Player; });
+/* harmony import */ var _base_UI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../base/UI */ "./src/base/UI.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
 
 var Player =
 /*#__PURE__*/
@@ -1045,7 +1092,7 @@ function () {
   }, {
     key: "createHUD",
     value: function createHUD() {
-      this.hud = new UI('playerHudUI');
+      this.hud = new _base_UI__WEBPACK_IMPORTED_MODULE_0__["default"]('playerHudUI');
       this.metersTextControl = this.hud.addText('Meters: 0', {
         'top': '10px',
         'left': '10px',
@@ -1285,15 +1332,22 @@ function () {
   return Player;
 }();
 
+
+
 /***/ }),
 
 /***/ "./src/game/levels/CreditsLevel.js":
 /*!*****************************************!*\
   !*** ./src/game/levels/CreditsLevel.js ***!
   \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CreditsLevel; });
+/* harmony import */ var _base_UI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../base/UI */ "./src/base/UI.js");
+/* harmony import */ var _base_Level__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../base/Level */ "./src/base/Level.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1311,6 +1365,9 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
 
 var CreditsLevel =
 /*#__PURE__*/
@@ -1334,7 +1391,7 @@ function (_Level) {
   }, {
     key: "makeUI",
     value: function makeUI() {
-      var ui = new UI('creditsUI');
+      var ui = new _base_UI__WEBPACK_IMPORTED_MODULE_0__["default"]('creditsUI');
       ui.addText('Design and Code:\n Tiago Silva Pereira Rodrigues', {
         'top': '10px',
         'fontSize': '20px',
@@ -1362,7 +1419,9 @@ function (_Level) {
   }]);
 
   return CreditsLevel;
-}(Level);
+}(_base_Level__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+
 
 /***/ }),
 
@@ -1370,9 +1429,14 @@ function (_Level) {
 /*!******************************************!*\
   !*** ./src/game/levels/HomeMenuLevel.js ***!
   \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return HomeMenuLevel; });
+/* harmony import */ var _base_UI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../base/UI */ "./src/base/UI.js");
+/* harmony import */ var _base_Level__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../base/Level */ "./src/base/Level.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1391,6 +1455,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+
+
+
 var HomeMenuLevel =
 /*#__PURE__*/
 function (_Level) {
@@ -1408,7 +1475,7 @@ function (_Level) {
       var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), this.scene); // Make this scene transparent to see the document background
 
       this.scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
-      var menu = new UI('homeMenuUI');
+      var menu = new _base_UI__WEBPACK_IMPORTED_MODULE_0__["default"]('homeMenuUI');
       menu.addButton('playButton', 'Play Game', {
         'background': GAME.options.backgroundColor,
         'color': 'white',
@@ -1428,7 +1495,9 @@ function (_Level) {
   }]);
 
   return HomeMenuLevel;
-}(Level);
+}(_base_Level__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+
 
 /***/ }),
 
@@ -1436,9 +1505,17 @@ function (_Level) {
 /*!****************************************!*\
   !*** ./src/game/levels/RunnerLevel.js ***!
   \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RunnerLevel; });
+/* harmony import */ var _base_UI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../base/UI */ "./src/base/UI.js");
+/* harmony import */ var _Player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Player */ "./src/game/Player.js");
+/* harmony import */ var _Monster__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Monster */ "./src/game/Monster.js");
+/* harmony import */ var _base_Level__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../base/Level */ "./src/base/Level.js");
+/* harmony import */ var _generators_TilesGenerator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./generators/TilesGenerator */ "./src/game/levels/generators/TilesGenerator.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1456,6 +1533,12 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
 
 var RunnerLevel =
 /*#__PURE__*/
@@ -1508,7 +1591,7 @@ function (_Level) {
       light2.intensity = 0.2;
       this.createPlayer();
       this.createMonster();
-      this.tiles = new TilesGenerator(this);
+      this.tiles = new _generators_TilesGenerator__WEBPACK_IMPORTED_MODULE_4__["default"](this);
       this.tiles.generate();
       this.scene.debugLayer.hide();
       this.scene.debugLayer.show({
@@ -1520,7 +1603,7 @@ function (_Level) {
     value: function createMenus() {
       var _this = this;
 
-      this.menu = new UI('runnerMenuUI');
+      this.menu = new _base_UI__WEBPACK_IMPORTED_MODULE_0__["default"]('runnerMenuUI');
       this.pointsTextControl = this.menu.addText('Points: 0', {
         'top': '-150px',
         'color': GAME.options.pointsTextColor,
@@ -1567,7 +1650,7 @@ function (_Level) {
       var _this2 = this;
 
       // Creates the player and sets it as camera target
-      this.player = new Player(this);
+      this.player = new _Player__WEBPACK_IMPORTED_MODULE_1__["default"](this);
       this.scene.activeCamera.lockedTarget = this.player.getMesh();
       var playerLight = new BABYLON.DirectionalLight("playerLight", new BABYLON.Vector3(1, -2, 1), this.scene);
       playerLight.intensity = 0.3;
@@ -1600,7 +1683,7 @@ function (_Level) {
   }, {
     key: "createMonster",
     value: function createMonster() {
-      this.monster = new Monster(this); // Add monster shadow
+      this.monster = new _Monster__WEBPACK_IMPORTED_MODULE_2__["default"](this); // Add monster shadow
 
       this.scene.shadowGenerator.getShadowMap().renderList.push(this.monster.mesh);
     }
@@ -1629,7 +1712,9 @@ function (_Level) {
   }]);
 
   return RunnerLevel;
-}(Level);
+}(_base_Level__WEBPACK_IMPORTED_MODULE_3__["default"]);
+
+
 
 /***/ }),
 
@@ -1637,9 +1722,12 @@ function (_Level) {
 /*!******************************************************!*\
   !*** ./src/game/levels/generators/TilesGenerator.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TilesGenerator; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1966,6 +2054,8 @@ function () {
 
   return TilesGenerator;
 }();
+
+
 
 /***/ }),
 

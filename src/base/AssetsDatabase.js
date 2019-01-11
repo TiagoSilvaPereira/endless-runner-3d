@@ -1,4 +1,4 @@
-class AssetsDatabase {
+export default class AssetsDatabase {
     
     constructor(scene, finishCallback) {
 

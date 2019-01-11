@@ -1,4 +1,10 @@
-class RunnerLevel extends Level {
+import UI from '../../base/UI';
+import Player from '../Player';
+import Monster from '../Monster';
+import Level from '../../base/Level';
+import TilesGenerator from './generators/TilesGenerator';
+
+export default class RunnerLevel extends Level {
 
     setProperties() {
 

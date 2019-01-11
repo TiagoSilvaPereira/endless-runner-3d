@@ -1,4 +1,4 @@
-class Monster {
+export default class Monster {
 
     constructor(level) {
 

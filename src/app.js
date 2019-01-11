@@ -1,18 +1,25 @@
-// Base Logic
-require('./base/Log.js');
-require('./base/UI.js');
-require('./base/Level.js');
-require('./base/AssetsDatabase.js');
+
+
+import AssetsDatabase from './base/AssetsDatabase.js';
 
 // Game Logic
-require('./game/Player.js');
-require('./game/Monster.js');
-
-// Game Levels
-require('./game/levels/HomeMenuLevel.js');
-require('./game/levels/CreditsLevel.js');
-require('./game/levels/generators/TilesGenerator.js');
-require('./game/levels/RunnerLevel.js');
+import Player from './game/Player.js';
+import Monster from './game/Monster.js';
 
 // The Game main class
-require('./Game.js');
+import Game from './Game.js';
+
+window.GAME = null;
+
+var app = {
+
+    init() {
+        GAME = new Game(window.initialGameOptions);
+        GAME.start();
+    }
+
+}
+
+window.addEventListener('load', () => {
+    app.init();
+});

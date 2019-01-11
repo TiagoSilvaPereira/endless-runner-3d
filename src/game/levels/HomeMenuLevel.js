@@ -1,4 +1,7 @@
-class HomeMenuLevel extends Level {
+import UI from '../../base/UI';
+import Level from '../../base/Level';
+
+export default class HomeMenuLevel extends Level {
 
     buildScene() {
 

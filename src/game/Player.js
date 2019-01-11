@@ -1,4 +1,6 @@
-class Player {
+import UI from '../base/UI';
+
+export default class Player {
 
     constructor(level) {
         

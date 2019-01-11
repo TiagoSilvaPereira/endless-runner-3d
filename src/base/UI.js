@@ -1,4 +1,4 @@
-class UI {
+export default class UI {
 
     constructor(uiName) {
         this.controls = [];

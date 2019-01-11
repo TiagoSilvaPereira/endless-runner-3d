@@ -1,4 +1,6 @@
-class Level {
+import AssetsDatabase from './AssetsDatabase';
+
+export default class Level {
 
     constructor() {
         

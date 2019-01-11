@@ -1,4 +1,4 @@
-class TilesGenerator {
+export default class TilesGenerator {
 
     constructor(level) {
 

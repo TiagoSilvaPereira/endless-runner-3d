@@ -1,4 +1,12 @@
-class Game {
+// Base
+import Log from './base/Log.js';
+
+// Game Levels
+import RunnerLevel from './game/levels/RunnerLevel.js';
+import CreditsLevel from './game/levels/CreditsLevel.js';
+import HomeMenuLevel from './game/levels/HomeMenuLevel.js';
+
+export default class Game {
 
     constructor(options = {}) {
 
