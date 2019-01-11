@@ -1,66 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cube Endless Runner - 3D HTML5 WebGL Game</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Cube Endless Runner - 3D HTML5 WebGL Game</title>
 
-    <style>
-        html, body {
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
 
-        body {
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-position: center; 
-            background-color: #636e72;
-        }
+            body {
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-position: center; 
+                background-color: #636e72;
+            }
 
-        #renderCanvas {
-            width: 100%;
-            height: 100%;
-            touch-action: none;
-        }
-    </style>
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+        </style>
 
-    <!-- Mobile Controls -->
-	<script src="hammer.min.js"></script>
-    <script src="gyronorm.complete.min.js"></script>
-    
-    <!-- Game Graphics and Physics -->
-	<script src="cannon.js"></script>
-    <script src="babylon.max.js"></script>
-    <script src="babylon.gui.js"></script>
-    <script src=https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js></script>
-    <script src="babylon.addons.js"></script>
+        <!-- Mobile Controls -->
+        <script src="src/libs/hammer.min.js"></script>
+        
+        <!-- Game Graphics and Physics -->
+        <script src="src/libs/cannon.js"></script>
+        <script src="src/libs/babylon.max.js"></script>
+        <script src="src/libs/babylon.gui.js"></script>
+        <script src="src/libs/babylon.addons.js"></script>
 
-    <!-- Game Logic -->
-    <script src="src/Log.js"></script>
-    <script src="src/UI.js"></script>
-    <script src="src/Scene.js"></script>
-    <script src="src/Player.js"></script>
-    <script src="src/Monster.js"></script>
-    <script src="src/AssetsDatabase.js"></script>
-    <script src="src/Level.js"></script>
+        <!-- Base Logic -->
+        <script src="src/base/Log.js"></script>
+        <script src="src/base/UI.js"></script>
+        <script src="src/base/Level.js"></script>
+        <script src="src/base/AssetsDatabase.js"></script>
 
-    <!-- Game Levels -->
-    <script src="src/levels/HomeMenuLevel.js"></script>
-    <script src="src/levels/CreditsLevel.js"></script>
-    <script src="src/levels/generators/TilesGenerator.js"></script>
-    <script src="src/levels/RunnerLevel.js"></script>
-    
-    <script src="src/Game.js"></script>
+        <!-- Game Logic -->
+        <script src="src/game/Player.js"></script>
+        <script src="src/game/Monster.js"></script>
 
-    <script src="options.js"></script>
-    <script src="app.js"></script>
-</head>
-<body>
-    <canvas id="renderCanvas" touch-action="none"></canvas>
-</body>
+        <!-- Game Levels -->
+        <script src="src/game/levels/HomeMenuLevel.js"></script>
+        <script src="src/game/levels/CreditsLevel.js"></script>
+        <script src="src/game/levels/generators/TilesGenerator.js"></script>
+        <script src="src/game/levels/RunnerLevel.js"></script>
+        
+        <script src="src/Game.js"></script>
+
+        <script src="options.js"></script>
+        <script src="game.js"></script>
+
+    </head>
+
+    <body>
+        <!-- Main game canvas -->
+        <canvas id="renderCanvas" touch-action="none"></canvas>
+    </body>
+
 </html>
