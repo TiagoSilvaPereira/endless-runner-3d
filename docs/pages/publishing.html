@@ -56,7 +56,17 @@ As the game is made with HTML5 technologies, you can build and pack it to a mobi
 
 * The simplest way is packaging the main/public (see above) files into ZIP and using the [Cocoon Tool](https://cocoon.io/) to transform it in a mobile application. The [Cocoon Tool](https://cocoon.io/) is free up to 2 simultaneous projects and is very easy to use.
 
-* You can use [Apache Cordova](https://cordova.apache.org/) to compile the mobile application locally. It is a little more complicated because you need to install the platform API's on your machine and needs a little knowledge about mobile applications development. We only recommend it for experienced developers, or if you have time to learn Cordova properly.
+* You can use [Apache Cordova](https://cordova.apache.org/) to compile the mobile application locally. It is a little more complicated because you need to install the platform API's on your machine and needs a little knowledge about mobile applications development. We only recommend it for experienced developers, or if you have time to learn Cordova properly. You can learn more about this alternative [here](https://auth0.com/blog/converting-your-web-app-to-mobile/).
+
+## Publishing into Desktop application
+
+To publish the game into Desktop application, we recommend using one of the following technologies:
+
+* [NW.js](https://nwjs.io/) - It is very ease to transform an html5 application to a desktop application using NW.js, you need only to drag the main/public files (see above) to the correct folder, configure the **package.json** to point the **index.html** file and the application is now running. See the [documentation](http://docs.nwjs.io/en/latest/For%20Users/Getting%20Started/) to understand better how it works.
+
+* [ElectronJS](https://electronjs.org/) - It is an awesome solution to create Desktop Applications using HTML5 technology. You will need a little more knowledge about Node.js and JavaScript here, but it is not complicated to use.
+
+You can compare the differences between these two solutions [here](https://electronjs.org/docs/development/atom-shell-vs-node-webkit).
 </div>
 
     </div>
