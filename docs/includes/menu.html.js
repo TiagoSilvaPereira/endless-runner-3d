@@ -16,7 +16,7 @@ document.write('\
         <li class="pure-menu-item"><a href="' + menuContext + 'pages/log_class.html" class="pure-menu-link">The Log Class</a></li>\
         <li class="pure-menu-item pure-menu-with-divider"><div class="pure-menu-divider"></div></li>\
         <li class="pure-menu-item"><a href="' + menuContext + 'pages/licenses.html" class="pure-menu-link">Licenses <div class="important"></div></a></li>\
-        <li class="pure-menu-item"><a href="' + menuContext + 'pages/more.html" class="pure-menu-link">Wants more game sources?</a></li>\
+        <li class="pure-menu-item"><a href="' + menuContext + 'pages/more.html" class="pure-menu-link">Wants more games?</a></li>\
         \
     </ul>\
 </div>');
