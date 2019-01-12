@@ -33,7 +33,21 @@
 <div id="markdown-content" class="content">
 # Changing basic game options
 
+To fastly change some aspects of the game appearance and gameplay, we added the **public/options.js** file.
 
+You don't need to recompile the game when modifying this file, then you can see the modifications simply reloading the browser.
+
+For example, let's assume you want the gameplay more difficulty, then you can change the size of the tiles. You can simply overwrite these options:
+
+```
+'level': {
+    'tileWidth': 1.8,
+    'smallTileWidth': 0.45,
+    'hazardWidth': 1.4,
+},
+```
+
+And then restart the game, you will see the changes in realtime.
 </div>
 
     </div>
