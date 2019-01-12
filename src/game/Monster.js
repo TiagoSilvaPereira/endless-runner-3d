@@ -59,6 +59,7 @@ export default class Monster {
         this.attackSound.play();
         this.level.interpolate(this, 'distanceBeetweenPlayer', 0.1, 300);
         
+        // Player dies after 300ms
         setTimeout(() => this.player.die(), 300);
     }
 
