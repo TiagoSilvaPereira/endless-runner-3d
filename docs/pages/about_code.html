@@ -52,13 +52,22 @@ moveAwayFromPlayer() {
 }
 ```
 
-You can see more 
+You can see more examples in this [Gist](https://gist.github.com/TiagoSilvaPereira/8f3c1a49c87a70446191dafda916674b).
 
 ## 2 - Comments
 
 We commented all the complex code to help understant how the code works. 
 
 ## 3 - BabylonJS Addons
+
+We added some methods to help interaction with **BabylonJS** engine writing less code. You can find some of these methods inside the **/src/libs/babylon.addons.js**:
+
+
+**mesh.executeOnIntersection** - Used to execute some code when a BabylonJS mesh intersects another mesh.
+
+**mesh.setEllipsoidPerBoundingBox** - This method sets a collision ellipsoid based on the mesh bounding box
+
+**mesh.drawEllipsoid** - Can be helpful if you want to draw the mesh collision ellipsoid
 </div>
 
     </div>
