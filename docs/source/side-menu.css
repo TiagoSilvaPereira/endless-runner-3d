@@ -19,6 +19,23 @@ pre {
     border-bottom: 1px solid #cacaca;
 }
 
+li .important {
+    display: inline-block;
+    background-color: #cc3333;
+    color: white;
+    border-radius: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+li .important::after {
+    content: 'Important';
+}
+
+li.important.green {
+    background-color: #33cc33;
+}
+
 .pure-img-responsive {
     max-width: 100%;
     height: auto;
