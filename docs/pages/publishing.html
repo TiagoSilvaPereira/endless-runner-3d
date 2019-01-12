@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cube Endless Runner Documentation</title>
+
+    <!-- PureCSS -->
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+    <link rel="stylesheet" href="../source/side-menu.css">
+
+</head>
+<body>
+
+<div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <!-- Write the menu html to avoid duplication -->
+        <script>
+            var menuContext = '../';
+        </script>
+        <script src="../includes/menu.html.js"></script>
+    </div>
+
+    <div id="main">
+
+<div id="markdown-content" class="content">
+# Publishing
+
+The first thing to know before publishing the game is what are the files that will be published or packaged.
+
+It is important to say that you don't need to upload all the files, only:
+
+* **index.html** and **options.js** files in the main folder
+* **/assets** and **/build** folders with all their files
+
+The other files and folders (**/docs, /node\_modules, /src,** etc) are not necessary because they are used only to build the game, and **we highly recommend** to never upload these files to your remote webserver (mainly the **/node\_modules** folder, if exists).
+
+The **/node\_modules** folder will exist only if you setup the npm modules to modify the code. If you are not modifying the code, don't worry about it.
+
+Here is an image to help you... The files and folders marked in red are the main files to run the game. The other files are 
+
+## Publishing to Web
+
+To publish the game on your website, you need only to upload (using FTP, GIT, etc) the game main files (see above) to a folder inside you webserver (maybe inside public_html, www, etc). Then, you may add a subdomain (or another domain) that points to your game folder to access it, or, if your webserver allows, you can access directly the game folder.
+
+
+
+## Publishing to Mobile
+
+As the game is made with HTML5 technologies, you can build and pack it to a mobile application. The simplest way to make it is using
+
+</div>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.rawgit.com/showdownjs/showdown/1.9.0/dist/showdown.min.js"></script>.
+<script src="../source/ui.js"></script>
+<script src="../source/docs.js"></script>
+
+</body>
+</html>
