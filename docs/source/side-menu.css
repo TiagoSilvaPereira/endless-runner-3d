@@ -9,6 +9,16 @@ pre {
     border-radius: 5px;
 }
 
+.pure-menu-with-divider {
+    padding: 3px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.pure-menu-divider {
+    border-bottom: 1px solid #cacaca;
+}
+
 .pure-img-responsive {
     max-width: 100%;
     height: auto;
