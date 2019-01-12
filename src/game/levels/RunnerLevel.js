@@ -42,7 +42,7 @@ export default class RunnerLevel extends Level {
         this.scene.activeCamera = camera;
 
         // Uncomment it to allow free camera rotation
-        camera.attachControl(GAME.canvas, true);
+        //camera.attachControl(GAME.canvas, true);
 
         // Add lights to the scene
         var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 10, 0), this.scene);

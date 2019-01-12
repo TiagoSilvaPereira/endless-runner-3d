@@ -35,27 +35,28 @@
 
 The first thing to know before publishing the game is what are the files that will be published or packaged.
 
-It is important to say that you don't need to upload all the files, only:
-
-* **index.html** and **options.js** files in the main folder
-* **/assets** and **/build** folders with all their files
+It is important to say that you don't need to upload or package all the files, only the /public folder.
 
 The other files and folders (**/docs, /node\_modules, /src,** etc) are not necessary because they are used only to build the game, and **we highly recommend** to never upload these files to your remote webserver (mainly the **/node\_modules** folder, if exists).
 
-The **/node\_modules** folder will exist only if you setup the npm modules to modify the code. If you are not modifying the code, don't worry about it.
+The **/node\_modules** folder will exist only if you setup the NPM modules to modify the code. If you are not modifying the code, don't worry about it.
 
-Here is an image to help you... The files and folders marked in red are the main files to run the game. The other files are 
+Here is an image to help you... The files and folders marked in red are the main files to run, upload and package the game.
+
+![Main Files Image](../assets/upload_files.jpg)
 
 ## Publishing to Web
 
 To publish the game on your website, you need only to upload (using FTP, GIT, etc) the game main files (see above) to a folder inside you webserver (maybe inside public_html, www, etc). Then, you may add a subdomain (or another domain) that points to your game folder to access it, or, if your webserver allows, you can access directly the game folder.
 
 
-
 ## Publishing to Mobile
 
-As the game is made with HTML5 technologies, you can build and pack it to a mobile application. The simplest way to make it is using
+As the game is made with HTML5 technologies, you can build and pack it to a mobile application. We have some ways to do it:
 
+* The simplest way is packaging the main/public (see above) files into ZIP and using the [Cocoon Tool](https://cocoon.io/) to transform it in a mobile application. The [Cocoon Tool](https://cocoon.io/) is free up to 2 simultaneous projects and is very easy to use.
+
+* You can use [Apache Cordova](https://cordova.apache.org/) to compile the mobile application locally. It is a little more complicated because you need to install the platform API's on your machine and needs a little knowledge about mobile applications development. We only recommend it for experienced developers, or if you have time to learn Cordova properly.
 </div>
 
     </div>
