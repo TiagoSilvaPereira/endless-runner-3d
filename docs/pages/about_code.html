@@ -35,13 +35,13 @@
 
 The game was made with [BabylonJS](https://www.babylonjs.com/) (*A complete JavaScript framework for building 3D games and experiences with HTML5, WebGL, WebVR and Web Audio*) using the JavaScript language. 
 
-As we used **ES6+** Javascript code (to allow a good code organization), it is necessary to transpile to code to **ES5** before. The **ES6+** code is always in the *src/* folder, and the transpiled **ES5** code is always inside the */build* folder.
+As we used **ES6+** Javascript code (to allow a good code organization), it is necessary to "transpile" the code to **ES5** before. The **ES6+** code is always in the *src/* folder, and the "transpiled" **ES5** code is always inside the */build* folder.
 
 We have adopted some code conventions and patterns to keep the code quality. Let's see it below:
 
 ## 1 - Clean Code
 
-We tried to keep the code the maximum cleaner as possible, following **Clean Code** conventions like naming, small methods, SRP classes, etc. (No single letters variables, no big methods and no God Classes).
+We tried to keep the code the maximum cleaner as possible, following **Clean Code** conventions like naming, small methods, SRP classes, etc. (No single letters variables, no big methods, and no God Classes).
 
 See a small piece of code example (inside the class **Monster.js**):
 
@@ -56,9 +56,9 @@ You can see more examples in this [Gist](https://gist.github.com/TiagoSilvaPerei
 
 ## 2 - Comments
 
-We commented all the complex code to help understant how the code works. 
+We commented all the complex code to help understand how the code works. 
 
-## 3 - BabylonJS Addons
+## 3 - BabylonJS Add-ons
 
 We added some methods to help interaction with **BabylonJS** engine writing less code. You can find some of these methods inside the **/src/libs/babylon.addons.js**:
 
@@ -68,6 +68,34 @@ We added some methods to help interaction with **BabylonJS** engine writing less
 **mesh.setEllipsoidPerBoundingBox** - This method sets a collision ellipsoid based on the mesh bounding box
 
 **mesh.drawEllipsoid** - Can be helpful if you want to draw the mesh collision ellipsoid
+
+## 4 - The GAME object
+
+The GAME object is a global instance of the **Game.js** class that you can access from any part of the code. It is helpful to a lot of cases, for example:
+
+```
+// Getting options from options.js
+let color = GAME.options.backgroundColor;
+
+// Testing game controls
+if(GAME.keys.left) {
+    // Then move something to left
+}
+
+// Pause the game
+GAME.pause();
+GAME.resume();
+
+// Test if the game is paused
+if(GAME.isPaused()) {
+    // Do anything
+}
+
+// Use the Debug Log (See more on the Log Class Section)
+GAME.log.push({});
+GAME.log.doing('WALKING...');
+GAME.log.logLast(10);
+```
 </div>
 
     </div>
