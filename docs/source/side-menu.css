@@ -19,6 +19,10 @@ pre {
     border-bottom: 1px solid #cacaca;
 }
 
+.success-text {
+    color: #33cc33 !important;
+}
+
 li .important {
     display: inline-block;
     background-color: #cc3333;

@@ -1398,13 +1398,13 @@ function (_Level) {
     key: "makeUI",
     value: function makeUI() {
       var ui = new _base_UI__WEBPACK_IMPORTED_MODULE_0__["default"]('creditsUI');
-      ui.addText('Design and Code by Tiago Silva Pereira Rodrigues\n\nkingofcode.com.br\n\n', {
+      ui.addText('Design and Code by Tiago Silva Pereira Rodrigues\nkingofcode.com.br\n\n\n', {
         'top': '30px',
         'fontSize': '20px',
         'horizontalAlignment': BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_TOP
       });
-      ui.addText('Music by Eric Matyas\n\nwww.soundimage.org', {
-        'top': '110px',
+      ui.addText('Music by Eric Matyas\nwww.soundimage.org\n\nPlease check the game license documentation before\nchanging the credits', {
+        'top': '140px',
         'fontSize': '20px',
         'horizontalAlignment': BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_TOP
       });
