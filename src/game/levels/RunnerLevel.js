@@ -97,6 +97,22 @@ export default class RunnerLevel extends Level {
         });
 
         this.menu.hide();
+
+        this.createTutorialText();
+
+    }
+
+    createTutorialText() {
+        let text = GAME.isMobile() ? 'Swipe the screen to control de cube' : 'Use Arrow Keys or WASD to control the cube';
+
+        // Small tutorial text
+        let tutorialText = this.menu.addText(text, {
+            'verticalAlignment': BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER
+        });
+
+        setTimeout(() => {
+            this.menu.remove(tutorialText);
+        }, 5000);
     }
 
     createArcCamera() {

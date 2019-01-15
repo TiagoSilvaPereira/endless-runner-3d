@@ -312,6 +312,15 @@ function () {
     value: function stopRenderLoop() {
       this.engine.stopRenderLoop();
     }
+  }, {
+    key: "isMobile",
+    value: function isMobile() {
+      if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {
+        return true;
+      }
+
+      return false;
+    }
   }]);
 
   return Game;
@@ -780,6 +789,7 @@ function () {
   function UI(uiName) {
     _classCallCheck(this, UI);
 
+    this.currentControlID = 0;
     this.controls = [];
     this.menuTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI(uiName);
   }
@@ -805,7 +815,7 @@ function () {
       }
 
       this.menuTexture.addControl(button);
-      this.controls.push(button);
+      this.add(button);
       return button;
     }
   }, {
@@ -825,8 +835,20 @@ function () {
       textControl.textVerticalAlignment = typeof options.verticalAlignment !== 'undefined' ? options.verticalAlignment : BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
       textControl.textWrapping = options.wrapping || true;
       this.menuTexture.addControl(textControl);
-      this.controls.push(textControl);
+      this.add(textControl);
       return textControl;
+    }
+  }, {
+    key: "add",
+    value: function add(control) {
+      control.uiControlID = this.currentControlID++;
+      this.controls.push(control);
+    }
+  }, {
+    key: "remove",
+    value: function remove(control) {
+      control.isVisible = false;
+      this.controls.splice(control.uiControlID, 1);
     }
   }, {
     key: "show",
@@ -1642,6 +1664,21 @@ function (_Level) {
         }
       });
       this.menu.hide();
+      this.createTutorialText();
+    }
+  }, {
+    key: "createTutorialText",
+    value: function createTutorialText() {
+      var _this2 = this;
+
+      var text = GAME.isMobile() ? 'Swipe the screen to control de cube' : 'Use Arrow Keys or WASD to control the cube'; // Small tutorial text
+
+      var tutorialText = this.menu.addText(text, {
+        'verticalAlignment': BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER
+      });
+      setTimeout(function () {
+        _this2.menu.remove(tutorialText);
+      }, 5000);
     }
   }, {
     key: "createArcCamera",
@@ -1655,7 +1692,7 @@ function (_Level) {
   }, {
     key: "createPlayer",
     value: function createPlayer() {
-      var _this2 = this;
+      var _this3 = this;
 
       // Creates the player and sets it as camera target
       this.player = new _Player__WEBPACK_IMPORTED_MODULE_1__["default"](this);
@@ -1670,9 +1707,9 @@ function (_Level) {
       this.player.onDie = function () {
         GAME.pause();
 
-        _this2.player.calculatePoints();
+        _this3.player.calculatePoints();
 
-        _this2.showMenu();
+        _this3.showMenu();
       };
     }
   }, {

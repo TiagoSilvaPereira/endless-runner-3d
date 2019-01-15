@@ -1,6 +1,7 @@
 export default class UI {
 
     constructor(uiName) {
+        this.currentControlID = 0;
         this.controls = [];
 
         this.menuTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI(uiName);
@@ -25,7 +26,7 @@ export default class UI {
         }
 
         this.menuTexture.addControl(button);
-        this.controls.push(button);
+        this.add(button);
 
         return button;
     }
@@ -45,9 +46,19 @@ export default class UI {
         textControl.textWrapping = options.wrapping || true;
         
         this.menuTexture.addControl(textControl);
-        this.controls.push(textControl);
+        this.add(textControl);
 
         return textControl;
+    }
+
+    add(control) {
+        control.uiControlID = this.currentControlID++;
+        this.controls.push(control);
+    }
+
+    remove(control) {
+        control.isVisible = false;
+        this.controls.splice(control.uiControlID, 1);
     }
 
     show() {
