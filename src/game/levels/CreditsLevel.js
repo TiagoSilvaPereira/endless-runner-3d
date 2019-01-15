@@ -21,20 +21,14 @@ export default class CreditsLevel extends Level {
     makeUI() {
         var ui = new UI('creditsUI');
         
-        ui.addText('Design and Code:\n Tiago Silva Pereira Rodrigues', {
-            'top': '10px',
+        ui.addText('Design and Code by Tiago Silva Pereira Rodrigues\n\nkingofcode.com.br\n\n', {
+            'top': '30px',
             'fontSize': '20px',
             'horizontalAlignment': BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_TOP
         });
 
-        ui.addText('Music:\n Sound Image', {
-            'top': '80px',
-            'fontSize': '20px',
-            'horizontalAlignment': BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_TOP
-        });
-
-        ui.addText('Sounds:\n Sound Image', {
-            'top': '150px',
+        ui.addText('Music by Eric Matyas\n\nwww.soundimage.org', {
+            'top': '110px',
             'fontSize': '20px',
             'horizontalAlignment': BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_TOP
         });
