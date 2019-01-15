@@ -36,8 +36,8 @@ export default class Monster {
 
         this.mesh.material = this.monsterMaterial;
 
-        this.approachSound = new BABYLON.Sound('approachSound', '/assets/sounds/monster.wav', this.scene, null);
-        this.attackSound = new BABYLON.Sound('attackSound', '/assets/sounds/monster_attack.mp3', this.scene);
+        this.approachSound = this.level.assets.getSound('approachSound');
+        this.attackSound = this.level.assets.getSound('attackSound');
 
     }
 

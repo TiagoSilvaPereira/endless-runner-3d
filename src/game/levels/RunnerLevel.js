@@ -28,6 +28,8 @@ export default class RunnerLevel extends Level {
         this.assets.addSound('playerDieSound', '/assets/sounds/game-die.mp3', { volume: 0.4 });
         this.assets.addSound('gotCoinSound', '/assets/sounds/coin-c-09.wav');
         this.assets.addSound('damageSound', '/assets/sounds/damage.wav');
+        this.assets.addSound('approachSound', '/assets/sounds/monster.wav');
+        this.assets.addSound('attackSound', '/assets/sounds/monster_attack.mp3');
         
     }
 

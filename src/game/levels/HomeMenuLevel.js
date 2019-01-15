@@ -3,6 +3,10 @@ import Level from '../../base/Level';
 
 export default class HomeMenuLevel extends Level {
 
+    setupAssets() {
+        this.assets.addMusic('music', '/assets/musics/Guitar-Mayhem.mp3');
+    }
+
     buildScene() {
 
         var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), this.scene);
