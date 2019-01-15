@@ -37,7 +37,7 @@ The first thing to know before publishing the game is what are the files that wi
 
 It is important to say that you don't need to upload or package all the files, only the /public folder.
 
-The other files and folders (**/docs, /node\_modules, /src,** etc) are not necessary because they are used only to build the game, and **we highly recommend** to never upload these files to your remote webserver (mainly the **/node\_modules** folder, if exists).
+The other files and folders (**/docs, /node\_modules, /src,** etc) are not necessary because they are used only to build the game, and **we highly recommend** to never upload these files to your remote web server (mainly the **/node\_modules** folder, if exists).
 
 The **/node\_modules** folder will exist only if you set up the NPM modules to modify the code. If you are not modifying the code, don't worry about it.
 
@@ -47,7 +47,7 @@ Here is an image to help you... The files and folders marked in red are the main
 
 ## 1 - Publishing to Web
 
-To publish the game on your website, you need only to upload (using FTP, GIT, etc) the game main files (see above) to a folder inside your webserver (maybe inside public_html, www, etc). Then, you may add a subdomain (or another domain) that points to your game folder to access it, or, if your webserver allows, you can access directly the game folder.
+To publish the game on your website, you need only to upload (using FTP, GIT, etc) the game main files (see above) to a folder inside your web server (maybe inside public_html, www, etc). Then, you may add a subdomain (or another domain) that points to your game folder to access it, or, if your web server allows, you can access directly the game folder.
 
 
 ## 2 - Publishing to Mobile
@@ -58,11 +58,11 @@ As the game is made with HTML5 technologies, you can build and pack it to a mobi
 
 * You can use [Apache Cordova](https://cordova.apache.org/) to compile the mobile application locally. It is a little more complicated because you need to install the platform API's on your machine and needs a little knowledge about mobile applications development. We only recommend it for experienced developers, or if you have time to learn Cordova properly. You can learn more about this alternative [here](https://auth0.com/blog/converting-your-web-app-to-mobile/).
 
-## 3 - Publishing into Desktop application
+## 3 - Publishing into a Desktop application
 
 To publish the game into Desktop application, we recommend using one of the following technologies:
 
-* [NW.js](https://nwjs.io/) - It is very ease to transform an html5 application to a desktop application using NW.js, you need only to drag the main/public files (see above) to the correct folder, configure the **package.json** to point the **index.html** file and the application is now running. See the [documentation](http://docs.nwjs.io/en/latest/For%20Users/Getting%20Started/) to understand better how it works.
+* [NW.js](https://nwjs.io/) - It is too easy to transform an html5 application to a desktop application using NW.js, you need only to drag the main/public files (see above) to the correct folder, configure the **package.json** to point the **index.html** file and the application is now running. See the [documentation](http://docs.nwjs.io/en/latest/For%20Users/Getting%20Started/) to understand better how it works.
 
 * [ElectronJS](https://electronjs.org/) - It is an awesome solution to create Desktop Applications using HTML5 technology. You will need a little more knowledge about Node.js and JavaScript here, but it is not complicated to use.
 
