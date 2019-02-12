@@ -1,5 +1,9 @@
 # Licenses
 
+## The Source Code
+
+The source code is distributed under MIT license.
+
 ## The Music
 
 All the music in this game was made by [Eric Matyas](https://soundimage.org/) from [https://soundimage.org/](https://soundimage.org/). 
@@ -7,16 +11,6 @@ All the music in this game was made by [Eric Matyas](https://soundimage.org/) fr
 If you want to keep the music for free on your published game, **you need** to keep the credits for Eric Matyas, on the format specified on his website.
 
 If you want to keep the music, but don't want to attribute [Eric Matyas](https://soundimage.org/), then you will need to purchase a non-attribution license from he for $30 per track. Please contact him at **ematyas@aol.com** or access his [website](https://soundimage.org/) for more details.
-
-## The Source Code
-
-If you are buying the source code from King of Code on CodeCanyon, you are **free** to study, modify and create your own game or product based on this source code. You don't need to keep our credits on the credits screen.
-
-**You can** sell derivated source code from the original code in a relation of **one-to-one licenses**. For each license acquired from King Of Code, **you can sell one derivated product**, or **you can publish one derivated product**.
-
-**You can** publish your product in multiple platforms (Eg: mobile, web, desktop) without the need to buy a new license. This is considered only one publishment. 
-
-**You can't** resell massively source code derivated from the original source code (Eg: resell derivated code on CodeCanyon, etc).
 
 ## The Sounds
 
